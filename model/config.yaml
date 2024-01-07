@@ -1,0 +1,8 @@
+path: D:\Projects\anpr\model\datasets #dataset root folder
+train: D:\Projects\anpr\model\datasets\train\images #train folder
+val: D:\Projects\anpr\model\datasets\valid\images #val folder
+test: D:\Projects\anpr\model\datasets\test\images #test folder
+
+#Classes
+
+names: ["License_Plate"]
