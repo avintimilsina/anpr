@@ -1,0 +1,22 @@
+{
+	"name": "anpr",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"lint": "next lint",
+		"format": "prettier --write .",
+		"prepare": "husky install"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@commitlint/cli": "^18.4.4",
+		"@commitlint/config-conventional": "^18.4.4",
+		"husky": "^8.0.3",
+		"prettier": "^3.1.1",
+		"prettier-plugin-tailwindcss": "^0.5.11"
+	}
+}

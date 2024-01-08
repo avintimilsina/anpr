@@ -1,8 +1,11 @@
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-}
+	productionBrowserSourceMaps: true,
+	i18n: {
+		locales: ["en", "np"],
+		defaultLocale: "en",
+	},
+	reactStrictMode: true,
+};
 
-module.exports = nextConfig
-``
+module.exports = nextConfig;
