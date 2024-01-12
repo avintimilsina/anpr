@@ -7,6 +7,7 @@ const CommitLintConfiguration = {
       [
         "build",
         "chore",
+        "notebook",
         "ci",
         "docs",
         "feat",
@@ -15,7 +16,8 @@ const CommitLintConfiguration = {
         "refactor",
         "revert",
         "style",
-        "test",
+        "test"
+
       ],
     ],
     "scope-enum": [
@@ -27,9 +29,14 @@ const CommitLintConfiguration = {
         "db",
         "api",
         "components",
+        "python",
         "config",
         "lib",
         "translations",
+        "pages",
+        "styles",
+        "utils",
+        "tests",
       ],
     ],
     "scope-case": [2, "always", "kebab-case"],
