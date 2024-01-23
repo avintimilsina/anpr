@@ -1,4 +1,5 @@
 import { useAuthState } from "react-firebase-hooks/auth";
+import { toast } from "sonner";
 import { useRouter } from "next/router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -10,8 +11,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { toast } from "@/components/ui/use-toast";
-import { auth } from "../../../firebase";
+import { auth } from "../../../../firebase";
 
 const UserNav = () => {
 	const [currentUser] = useAuthState(auth);
@@ -19,10 +19,7 @@ const UserNav = () => {
 
 	const doLogout = async () => {
 		await auth.signOut();
-		toast({
-			title: "Success!",
-			description: "You have been logged out.",
-		});
+		toast.success("You have been logged out.");
 		await router.push("/");
 	};
 

@@ -1,9 +1,9 @@
 import { FishIcon } from "lucide-react";
 import Link from "next/link";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../../firebase";
+import { auth } from "@/../firebase";
 import { Button } from "@/components/ui/button";
-import UserNav from "./UserNav";
+import UserNav from "./user-nav";
 
 const NavBar = () => {
 	const [currentUser] = useAuthState(auth);

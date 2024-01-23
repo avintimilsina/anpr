@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "@/components/ui/use-toast";
 import { auth } from "../../../firebase";
 
 interface ModalChangePasswordProps {
@@ -30,13 +29,10 @@ const ModalForgotPassword = ({
 		try {
 			setIsLoading(true);
 			await sendPasswordResetEmail(auth, email);
-			toast({
-				title: "Success!",
-				description: "Password reset email sent; please check your inbox.",
-			});
+			toast.success("Password reset email sent; please check your inbox.");
 			setIsOpen(false);
 		} catch (error) {
-			toast({ title: "Error", description: `${error}` });
+			toast.error("Error");
 		} finally {
 			setIsLoading(false);
 		}

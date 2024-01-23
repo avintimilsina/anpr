@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { toast } from "sonner";
 import { auth, db } from "../../../firebase";
 import { Button } from "../ui/button";
 import {
@@ -19,7 +20,6 @@ import {
 	FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { toast } from "../ui/use-toast";
 
 const formSchema = z.object({
 	email: z.string().email(),
@@ -52,17 +52,14 @@ const SignUpForm = ({ onShowLogin, onSignUp }: SignUpFormProps) => {
 					uid: response?.user.uid,
 					createdAt: response?.user.metadata?.creationTime,
 				});
-				toast({ title: "Account created!" });
+				toast.success("Account created!");
 				onSignUp?.();
 			}
 		} catch (signUpError: any) {
 			if ("code" in signUpError && signUpError.code.includes("already")) {
-				toast({ title: "User already exists" });
+				toast.error("User already exists");
 			} else {
-				toast({
-					title: "Error signing up",
-					description: `${signUpError.message}`,
-				});
+				toast.error("Error signing up");
 			}
 		} finally {
 			setIsLoading(false);

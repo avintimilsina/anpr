@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	useSignInWithEmailAndPassword,
 	useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
+import { toast } from "sonner";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import * as z from "zod";
@@ -18,10 +18,9 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { auth } from "../../../firebase";
-import { toast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
-import ModalForgotPassword from "./ModalForgotPassword";
+import ModalForgotPassword from "../modals/modal-forgot-password";
 
 const formSchema = z.object({
 	email: z.string().email(),
@@ -34,8 +33,7 @@ interface SignInFormProps {
 
 const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 	const [isResetOpen, setIsResetOpen] = useState(false);
-	const [signInWithEmailAndPassword, , , signInError] =
-		useSignInWithEmailAndPassword(auth);
+	const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
 	const [signInWithGoogle] = useSignInWithGoogle(auth);
 	const router = useRouter();
 
@@ -54,21 +52,12 @@ const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 			setIsLoading(true);
 			const response = await signInWithEmailAndPassword(email, password);
 			if (response) {
-				toast({
-					title: "Success!",
-					description: "You have been signed in.",
-				});
+				toast.success("You have been signed in.");
 			} else {
-				toast({
-					title: "Error Signing In",
-					description: `${signInError?.message}`,
-				});
+				toast.error("Error Signing In");
 			}
 		} catch (error) {
-			toast({
-				title: "Error Signing In",
-				description: `${signInError?.message}`,
-			});
+			toast.error("Error Signing In");
 		} finally {
 			setIsLoading(false);
 		}
@@ -116,9 +105,7 @@ const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 					const response = await signInWithGoogle();
 					if (response) {
 						await router.push("/");
-						toast({
-							title: `Successfully logged in`,
-						});
+						toast.success(`Successfully logged in`);
 					}
 				}}
 			>

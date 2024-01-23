@@ -2,8 +2,8 @@
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
-import SignInForm from "@/components/auth/SignInForm";
-import SignUpForm from "@/components/auth/SignUpForm";
+import SignInForm from "@/components/forms/sign-in-form";
+import SignUpForm from "@/components/forms/sign-up-form";
 import {
 	Card,
 	CardContent,
@@ -12,7 +12,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { auth } from "../../../firebase";
-import NavBar from "@/components/navBar/NavBar";
+import NavBar from "@/components/section/navbar";
 
 const LoginPage = () => {
 	const [isShowingSignUp, setIsShowingSignUp] = useState<boolean>(false);
