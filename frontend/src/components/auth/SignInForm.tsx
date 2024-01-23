@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+	useSignInWithEmailAndPassword,
+	useSignInWithGoogle,
+} from "react-firebase-hooks/auth";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import * as z from "zod";
+import { LogIn } from "lucide-react";
 import {
 	Form,
 	FormControl,
@@ -31,6 +36,8 @@ const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 	const [isResetOpen, setIsResetOpen] = useState(false);
 	const [signInWithEmailAndPassword, , , signInError] =
 		useSignInWithEmailAndPassword(auth);
+	const [signInWithGoogle] = useSignInWithGoogle(auth);
+	const router = useRouter();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -102,6 +109,22 @@ const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 					</Button>
 				</form>
 			</Form>
+			<Button
+				variant="outline"
+				disabled={isLoading}
+				onClick={async () => {
+					const response = await signInWithGoogle();
+					if (response) {
+						await router.push("/");
+						toast({
+							title: `Successfully logged in`,
+						});
+					}
+				}}
+			>
+				<LogIn className="mr-2 h-4 w-4" />
+				Google
+			</Button>
 			<p className="mt-4 text-sm">
 				Not a member?{" "}
 				<Button variant="link" onClick={onShowSignUp}>
@@ -118,4 +141,5 @@ const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 		</>
 	);
 };
+
 export default SignInForm;
