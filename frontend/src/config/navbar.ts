@@ -25,7 +25,7 @@ export const DASHBOARD_NAV_ITEMS_TOP: NavItem[] = [
 export const DASHBOARD_NAV_ITEMS_BOTTOM: NavItem[] = [
 	{
 		title: "Login",
-		href: "/auth",
+		href: "/auth/login",
 		icon: "login",
 		key: "login",
 	},
