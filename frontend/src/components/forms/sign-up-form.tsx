@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
-import { auth, db } from "../../../firebase";
+import { auth } from "../../../firebase";
 import { Button } from "../ui/button";
 import {
 	Form,
@@ -47,11 +47,6 @@ const SignUpForm = ({ onShowLogin, onSignUp }: SignUpFormProps) => {
 			setIsLoading(true);
 			const response = await createUserWithEmailAndPassword(email, password);
 			if (response) {
-				await setDoc(doc(db, "users", response?.user.uid), {
-					email: response?.user.email,
-					uid: response?.user.uid,
-					createdAt: response?.user.metadata?.creationTime,
-				});
 				toast.success("Account created!");
 				onSignUp?.();
 			}
