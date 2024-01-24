@@ -7,6 +7,21 @@ export type NavItem = {
 	key: string;
 };
 
+export const NAVBAR: NavItem[] = [
+	{
+		title: "Home",
+		href: "/",
+		icon: "menu",
+		key: "home",
+	},
+	{
+		title: "Admin",
+		href: "/admin",
+		icon: "user",
+		key: "admin",
+	},
+];
+
 export const DASHBOARD_NAV_ITEMS_TOP: NavItem[] = [
 	{
 		title: "Dashboard",

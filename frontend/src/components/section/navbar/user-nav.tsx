@@ -12,12 +12,15 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { auth } from "../../../../firebase";
+import usePaymentModal from "@/components/hooks/use-payment-modal";
 
 const UserNav = () => {
 	const [currentUser] = useAuthState(auth);
 	const router = useRouter();
 
-	const doLogout = async () => {
+	const { onOpen } = usePaymentModal();
+
+	const logout = async () => {
 		await auth.signOut();
 		toast.success("You have been logged out.");
 		await router.push("/");
@@ -39,7 +42,7 @@ const UserNav = () => {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-56" align="end" forceMount>
-				<DropdownMenuLabel className="font-normal">
+				<DropdownMenuLabel className="flex flex-col gap-2 font-normal">
 					<div className="flex flex-col space-y-1">
 						<p className="text-sm font-medium leading-none">
 							{currentUser?.email?.slice(0, currentUser?.email?.indexOf("@"))}
@@ -47,6 +50,12 @@ const UserNav = () => {
 						<p className="text-muted-foreground text-xs leading-none">
 							{currentUser?.email}
 						</p>
+					</div>
+					<div className="flex flex-row items-center justify-between">
+						<p className="text-sm font-medium leading-none">Balance: 0.00</p>
+						<Button size="xs" variant="default" onClick={onOpen}>
+							Load Wallet
+						</Button>
 					</div>
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
@@ -63,7 +72,7 @@ const UserNav = () => {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator /> */}
-				<DropdownMenuItem onClick={doLogout}>Log out</DropdownMenuItem>
+				<DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

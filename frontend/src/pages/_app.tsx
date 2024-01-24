@@ -12,8 +12,9 @@ import { useEffect } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../firebase";
-import AdminHeader from "@/components/section/navbar/admin-header";
 import Sidebar from "@/components/layout/admin-sidebar";
+import Navbar from "@/components/section/navbar";
+import ModalProvider from "@/components/modal-provider";
 
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
@@ -55,7 +56,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 				timeZone="UTC"
 				messages={pageProps.messages}
 			>
-				<AdminHeader />
+				<Navbar />
 				<div className="flex h-screen overflow-hidden">
 					<Sidebar>
 						<main className=" flex-1 overflow-y-auto overflow-x-hidden pt-16">
@@ -63,6 +64,8 @@ const App = ({ Component, pageProps }: AppProps) => {
 						</main>
 					</Sidebar>
 				</div>
+				<ModalProvider />
+				<Toaster richColors />
 			</NextIntlClientProvider>
 		);
 	}
@@ -74,6 +77,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 			messages={pageProps.messages}
 		>
 			<Component {...pageProps} />
+			<ModalProvider />
 			<Toaster richColors />
 		</NextIntlClientProvider>
 	);
@@ -82,8 +86,8 @@ const App = ({ Component, pageProps }: AppProps) => {
 export default App;
 
 // // Dashboard From Shadcn
-// Profile page from Shadcn
-// Profile page data update in database
+// // Profile page from Shadcn
+// // Profile page data update in database
 // Schema Define garnu paryo
 // Predifined Theme halnu paryo
 // Navbar ma  wallet ma kati paisa xa vanera pani dekhaunu paryo

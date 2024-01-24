@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { type GetStaticPropsContext } from "next";
-import NavBar from "@/components/section/navbar";
+import Navbar from "@/components/section/navbar";
 
 const Home = () => (
 	<div>
-		<NavBar />
+		<Navbar />
 	</div>
 );
 
