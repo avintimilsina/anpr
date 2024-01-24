@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import * as z from "zod";
-import { LogIn } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
 import {
 	Form,
 	FormControl,
@@ -93,12 +93,15 @@ const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 							</FormItem>
 						)}
 					/>
-					<Button type="submit" disabled={isLoading}>
+
+					<Button type="submit" disabled={isLoading} className="w-full">
 						Submit
 					</Button>
 				</form>
 			</Form>
 			<Button
+				type="button"
+				className="mt-4 flex w-full flex-row gap-2"
 				variant="outline"
 				disabled={isLoading}
 				onClick={async () => {
@@ -109,8 +112,8 @@ const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 					}
 				}}
 			>
-				<LogIn className="mr-2 h-4 w-4" />
-				Google
+				<FcGoogle className=" h-5 w-5" />
+				Continue with Google
 			</Button>
 			<p className="mt-4 text-sm">
 				Not a member?{" "}

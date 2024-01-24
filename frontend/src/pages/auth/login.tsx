@@ -31,13 +31,14 @@ const LoginPage = () => {
 			<div className="mt-[5%]">
 				<section className="mx-auto max-w-md">
 					<h1 className="mb-6 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-						Venefish
+						anpr
 					</h1>
 					<Card>
 						<CardHeader>
 							<CardTitle>{isShowingSignUp ? "Sign Up" : "Sign In"}</CardTitle>
 							<CardDescription>
-								Give them a reason to {isShowingSignUp ? "sign up" : "sign in"}.
+								Let&apos;s get started by{" "}
+								{isShowingSignUp ? "signing up" : "signing in"}.
 							</CardDescription>
 						</CardHeader>
 						<CardContent>

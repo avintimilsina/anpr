@@ -74,9 +74,7 @@ const SignUpForm = ({ onShowLogin, onSignUp }: SignUpFormProps) => {
 									<FormControl>
 										<Input type="email" {...field} />
 									</FormControl>
-									<FormDescription>
-										A valid email is required to watch locked specials.
-									</FormDescription>
+
 									<FormMessage />
 								</FormItem>
 							)}
@@ -90,14 +88,14 @@ const SignUpForm = ({ onShowLogin, onSignUp }: SignUpFormProps) => {
 									<FormControl>
 										<Input type="password" {...field} />
 									</FormControl>
-									<FormDescription>
-										Must be at least 8 characters long.
-									</FormDescription>
+
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
-						<Button type="submit">Sign Up</Button>
+						<Button type="submit" className="w-full">
+							Sign Up
+						</Button>
 					</fieldset>
 				</form>
 			</Form>

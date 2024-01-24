@@ -90,7 +90,7 @@ const ProfileForm = () => {
 						<FormItem>
 							<FormLabel>Name</FormLabel>
 							<FormControl>
-								<Input placeholder="shadcn" {...field} />
+								<Input placeholder="Enter your name" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>

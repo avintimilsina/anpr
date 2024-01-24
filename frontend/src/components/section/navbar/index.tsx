@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { auth } from "../../../../firebase";
 import UserNav from "./user-nav";
 import { NAVBAR } from "@/config/navbar";
+import ThemeToggle from "@/components/layout/theme-toggle";
 
 const Navbar = () => {
 	const [currentUser] = useAuthState(auth);
@@ -56,7 +57,7 @@ const Navbar = () => {
 						)}
 					</nav>
 					{/* <LocaleSwitcher variant="icon" /> */}
-					{/* <ThemeToggle /> */}
+					<ThemeToggle />
 				</div>
 			</nav>
 		</div>
