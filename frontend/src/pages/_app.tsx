@@ -104,7 +104,7 @@ export default App;
 // // Profile page from Shadcn
 // // Profile page data update in database
 // Schema Define garnu paryo
-// Predifined Theme halnu paryo
+// // Predifined Theme halnu paryo
 // Navbar ma  wallet ma kati paisa xa vanera pani dekhaunu paryo
 // Paisa load garne option hunu paryo
 // Khalti Esewa Stripe
@@ -114,3 +114,16 @@ export default App;
 // avin 2 4hr
 // Rohit 2 4hr
 // amisha 6
+
+// User dashboard
+// Driving license ko photo (optional)
+// multiple vehicle entry
+// License plate entry
+// Bluebook ko photo entry
+// Show biling
+
+// admin side
+// vehicle verification (aprovr decline)
+// add vehicle -> entry vehicle -> exit vehicle manually
+// add vehicle via video
+// Generate Billing

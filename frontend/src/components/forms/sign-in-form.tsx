@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-	useSignInWithEmailAndPassword,
-	useSignInWithGoogle,
-} from "react-firebase-hooks/auth";
+import { useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import * as z from "zod";
 import { FcGoogle } from "react-icons/fc";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import {
 	Form,
 	FormControl,
@@ -33,7 +34,6 @@ interface SignInFormProps {
 
 const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 	const [isResetOpen, setIsResetOpen] = useState(false);
-	const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
 	const [signInWithGoogle] = useSignInWithGoogle(auth);
 	const router = useRouter();
 
@@ -45,22 +45,12 @@ const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 		},
 	});
 
-	const [isLoading, setIsLoading] = useState(false);
-
 	const login = async ({ email, password }: z.infer<typeof formSchema>) => {
-		try {
-			setIsLoading(true);
-			const response = await signInWithEmailAndPassword(email, password);
-			if (response) {
-				toast.success("You have been signed in.");
-			} else {
-				toast.error("Error Signing In");
-			}
-		} catch (error) {
-			toast.error("Error Signing In");
-		} finally {
-			setIsLoading(false);
-		}
+		toast.promise(signInWithEmailAndPassword(auth, email, password), {
+			loading: "Logging In...",
+			success: "Logged In!",
+			error: (err: any) => err.message ?? "An error occured",
+		});
 	};
 
 	return (
@@ -94,7 +84,11 @@ const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 						)}
 					/>
 
-					<Button type="submit" disabled={isLoading} className="w-full">
+					<Button
+						type="submit"
+						disabled={form.formState.isSubmitting}
+						className="w-full"
+					>
 						Submit
 					</Button>
 				</form>
@@ -103,7 +97,7 @@ const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 				type="button"
 				className="mt-4 flex w-full flex-row gap-2"
 				variant="outline"
-				disabled={isLoading}
+				disabled={form.formState.isSubmitting}
 				onClick={async () => {
 					const response = await signInWithGoogle();
 					if (response) {

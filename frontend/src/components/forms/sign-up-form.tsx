@@ -1,19 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { toast } from "sonner";
+import { z } from "zod";
 import { auth } from "../../../firebase";
 import { Button } from "../ui/button";
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -31,7 +31,6 @@ interface SignUpFormProps {
 }
 
 const SignUpForm = ({ onShowLogin, onSignUp }: SignUpFormProps) => {
-	const [isLoading, setIsLoading] = useState(false);
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -39,32 +38,25 @@ const SignUpForm = ({ onShowLogin, onSignUp }: SignUpFormProps) => {
 			password: "",
 		},
 	});
-	const [createUserWithEmailAndPassword, , ,] =
-		useCreateUserWithEmailAndPassword(auth);
 
 	const signup = async ({ email, password }: z.infer<typeof formSchema>) => {
-		try {
-			setIsLoading(true);
-			const response = await createUserWithEmailAndPassword(email, password);
-			if (response) {
-				toast.success("Account created!");
+		toast.promise(createUserWithEmailAndPassword(auth, email, password), {
+			loading: "Creating account...",
+			success: () => {
 				onSignUp?.();
-			}
-		} catch (signUpError: any) {
-			if ("code" in signUpError && signUpError.code.includes("already")) {
-				toast.error("User already exists");
-			} else {
-				toast.error("Error signing up");
-			}
-		} finally {
-			setIsLoading(false);
-		}
+				return "Account created!";
+			},
+			error: (err: any) => err.message ?? "An error occured",
+		});
 	};
 	return (
 		<>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(signup)}>
-					<fieldset disabled={isLoading} className="space-y-4">
+					<fieldset
+						disabled={form.formState.isSubmitting}
+						className="space-y-4"
+					>
 						<FormField
 							control={form.control}
 							name="email"
