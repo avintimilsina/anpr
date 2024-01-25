@@ -5,17 +5,9 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
-import {
-	collection,
-	doc,
-	increment,
-	limit,
-	orderBy,
-	query,
-	runTransaction,
-	setDoc,
-} from "firebase/firestore";
+import { collection, doc, limit, orderBy, query } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { toast } from "sonner";
 import { auth, db } from "../../../firebase";
 
 const SuccessPage = () => {
@@ -44,77 +36,50 @@ const SuccessPage = () => {
 		}
 	);
 
+	let ignore = false;
 	useEffect(() => {
 		const runThisNow = async () => {
 			if (router.query.pidx ?? router.query.refId) {
-				const response = await (
-					await fetch("/api/payment/update", {
+				toast.promise(
+					fetch("/api/payment/update", {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
 						},
 						body: JSON.stringify(router.query),
-					})
-				).json();
-
-				if (response?.order.id) {
-					await setDoc(
-						doc(db, "orders", response.order.id as string),
-						response.order,
-						{
-							merge: true,
-						}
-					);
-				}
-
-				if (response?.payment && payments) {
-					await setDoc(
-						doc(
-							db,
-							"orders",
-							response.order.id as string,
-							"payments",
-							payments?.docs?.[0]?.id
-						),
-						response.payment,
-						{
-							merge: true,
-						}
-					);
-				}
-
-				if (response?.order.status === "PAID") {
-					await runTransaction(db, async (transaction) => {
-						transaction.update(
-							doc(
-								db,
-								"users",
-								(order?.userId as string) ?? currentUser?.uid ?? "not-found"
-							),
-							{
-								amount: increment(Number(order?.amount ?? 0) ?? 0),
-							}
-						);
-
-						transaction.update(doc(db, "orders", response.order.id as string), {
-							status: "COMPLETED",
-						});
-					});
-				}
-
-				setUpdatingPayment(false);
+					}),
+					{
+						loading: "Updating payment...",
+						success: () => {
+							setUpdatingPayment(false);
+							return "Payment updated successfully";
+						},
+						error: (err) => {
+							console.log(err);
+							setUpdatingPayment(false);
+							return "Error processing payment";
+						},
+					}
+				);
 			}
 		};
 
-		if (currentUser?.uid) {
+		if (currentUser?.uid && !ignore) {
 			void runThisNow();
 		}
+		return () => {
+			ignore = true;
+		};
 	}, [router.query, currentUser, order, payments]);
 
 	if (orderLoading || paymentLoading || updatingPayment || authLoading) {
 		return (
 			<div className="grid h-screen w-full place-items-center">
 				<h1>Loading...</h1>
+				<p>orderLoading {orderLoading.toString()}</p>
+				<p>paymentLoading {paymentLoading.toString()}</p>
+				<p>updatingPayment {updatingPayment.toString()}</p>
+				<p>authLoading {authLoading.toString()}</p>
 			</div>
 		);
 	}

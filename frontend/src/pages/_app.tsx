@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
@@ -12,6 +13,8 @@ import { useEffect } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { ThemeProvider } from "next-themes";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { onIdTokenChanged } from "firebase/auth";
+import nookies from "nookies";
 import { auth, db } from "../../firebase";
 import Sidebar from "@/components/layout/admin-sidebar";
 import Navbar from "@/components/section/navbar";
@@ -49,6 +52,19 @@ const App = ({ Component, pageProps }: AppProps) => {
 		// eslint-disable-next-line no-void
 		void setUser();
 	}, [currentUser]);
+
+	useEffect(() => {
+		const unsubscribe = onIdTokenChanged(auth, async (user) => {
+			if (user) {
+				const token = await user.getIdToken();
+				nookies.set(undefined, "token", token, { path: "/" });
+			} else {
+				nookies.set(undefined, "token", "", { path: "/" });
+			}
+		});
+
+		return unsubscribe;
+	}, []);
 
 	if (router.pathname.startsWith("/admin")) {
 		return (

@@ -5,7 +5,12 @@
 /* eslint-disable no-console */
 
 import type { NextApiRequest, NextApiResponse } from "next";
+import { FieldValue } from "firebase-admin/firestore";
 import { type Order, type Payment } from "@/db/schema";
+import firebaseAdminInit from "@/db/firebase-admin-init";
+
+// ?  Initializing firebase admin snippet
+const { db } = firebaseAdminInit();
 
 export default async function handler(
 	req: NextApiRequest,
@@ -16,9 +21,6 @@ export default async function handler(
 		res.status(405).send({ message: "Only POST requests allowed" });
 		return;
 	}
-
-	let payment: Record<string, string | number> = {};
-	let order: Record<string, string | number> = {};
 
 	if (req.body.pidx) {
 		// Khalti Payment
@@ -63,16 +65,79 @@ export default async function handler(
 				break;
 		}
 
-		payment = {
-			status: paymentStatus,
-			transactionId: data.transaction_id,
-			amount: data.amount,
-		};
+		const orderDetail = await db
+			.collection("orders")
+			.doc(req.body.purchase_order_id)
+			.get();
 
-		order = {
-			id: req.body.purchase_order_id,
-			status: orderStatus,
-		};
+		const paymentDetail = await db
+			.collection("orders")
+			.doc(req.body.purchase_order_id)
+			.collection("payments")
+			.orderBy("createdAt")
+			.limit(1)
+			.get();
+
+		console.log("Order Details", orderDetail.data());
+		console.log("paymentDetail ", paymentDetail.docs[0].data());
+		console.log("Purchase Id", req.body.purchase_order_id);
+
+		await db
+			.collection("orders")
+			.doc(req.body.purchase_order_id)
+			.collection("payments")
+			.doc(paymentDetail.docs[0].data().id as string)
+			.set(
+				{
+					status: paymentStatus,
+					transactionId: data.transaction_id,
+				},
+				{ merge: true }
+			);
+
+		// set the order status to PLACED when a new order is initiated
+		if (orderDetail.data()?.status === "PENDING") {
+			console.log("Pending RAN");
+			await db.collection("orders").doc(req.body.purchase_order_id).set(
+				{
+					status: orderStatus,
+				},
+				{ merge: true }
+			);
+
+			if (orderStatus === "PAID") {
+				await db.runTransaction(async (t) => {
+					t.update(
+						db.collection("users").doc(orderDetail.data()?.userId as string),
+						{
+							amount: FieldValue.increment(
+								Number(orderDetail.data()?.amount ?? 0) ?? 0
+							),
+						}
+					);
+
+					t.update(db.collection("orders").doc(req.body.purchase_order_id), {
+						status: "COMPLETED",
+					});
+				});
+			}
+		} else if (orderDetail.data()?.status === "PAID") {
+			console.log("PAID Ran");
+			await db.runTransaction(async (t) => {
+				t.update(
+					db.collection("users").doc(orderDetail.data()?.userId as string),
+					{
+						amount: FieldValue.increment(
+							Number(orderDetail.data()?.amount ?? 0) ?? 0
+						),
+					}
+				);
+
+				t.update(db.collection("orders").doc(req.body.purchase_order_id), {
+					status: "COMPLETED",
+				});
+			});
+		}
 	} else if (req.body.refId) {
 		// Esewa Payment
 		const body = new FormData();
@@ -92,17 +157,62 @@ export default async function handler(
 			? "COMPLETED"
 			: "FAILED";
 
-		payment = {
-			status: orderStatus,
-			transactionId: req.body.refId,
-		};
+		const orderDetail = await db.collection("orders").doc(req.body.oid).get();
 
-		order = {
-			id: req.body.oid,
-			status: orderStatus,
-			amount: req.body.amt,
-		};
+		const paymentDetail = await db
+			.collection("orders")
+			.doc(req.body.oid)
+			.collection("payments")
+			.orderBy("createdAt")
+			.limit(1)
+			.get();
+
+		await db
+			.collection("orders")
+			.doc(req.body.purchase_order_id)
+			.collection(paymentDetail.docs[0].data().id as string)
+			.doc(req.body.token)
+			.set(
+				{
+					status: orderStatus === "COMPLETED" ? "PAID" : "FAILED",
+					transactionId: req.body.refId,
+				},
+				{ merge: true }
+			);
+
+		// set the order status to PLACED when a new order is initiated
+		if (orderDetail.data()?.status === "PENDING") {
+			await db.collection("orders").doc(req.body.orderId).set(
+				{
+					status: "PAID",
+				},
+				{ merge: true }
+			);
+			await db.runTransaction(async (t) => {
+				t.update(db.collection("users").doc(orderDetail.data()?.id as string), {
+					amount: FieldValue.increment(
+						Number(orderDetail.data()?.amount ?? 0) ?? 0
+					),
+				});
+
+				t.update(db.collection("orders").doc(req.body.purchase_order_id), {
+					status: "COMPLETED",
+				});
+			});
+		} else if (orderDetail.data()?.status === "PAID") {
+			await db.runTransaction(async (t) => {
+				t.update(db.collection("users").doc(orderDetail.data()?.id as string), {
+					amount: FieldValue.increment(
+						Number(orderDetail.data()?.amount ?? 0) ?? 0
+					),
+				});
+
+				t.update(db.collection("orders").doc(req.body.purchase_order_id), {
+					status: "COMPLETED",
+				});
+			});
+		}
 	}
 
-	res.status(200).json({ payment, order });
+	res.status(200).json({ success: true });
 }
