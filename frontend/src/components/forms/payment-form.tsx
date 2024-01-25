@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
@@ -9,6 +10,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { nanoid } from "nanoid";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -51,19 +53,19 @@ const PaymentForm = () => {
 	});
 
 	const onSubmit = async (data: PaymentFormValues) => {
-		toast.info(`Amount: ${data.amount}, Provider: ${data.provider}`);
-
 		const orderId = generateId("ORD");
 
 		await setDoc(doc(db, "orders", orderId), {
 			id: orderId,
-			amount: data.amount,
+			amount: data.amount * 100,
 			userId: currentUser?.uid ?? "",
+			status: "PENDING",
 		} satisfies Order);
 
 		const paymentId = generateId("PAY");
 
 		await setDoc(doc(db, "orders", orderId, "payments", paymentId), {
+			id: paymentId,
 			orderId,
 			userId: currentUser?.uid ?? "",
 			refunded: false,
@@ -72,57 +74,110 @@ const PaymentForm = () => {
 			createdAt: serverTimestamp(),
 		} satisfies Payment);
 
-		switch (data.provider) {
-			case "KHALTI":
-				const response = await fetch("/api/payment/khalti", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						amount: data.amount * 100,
-						purchase_order_id: orderId,
-						purchase_order_name: `Wallet Load Rs${data.amount}`,
-						customer_info: {
-							name: currentUser?.displayName ?? "Name not provided",
-							email: currentUser?.email ?? "Name not provided",
-							phone: "9800000000",
-						},
-						amount_breakdown: [
-							{
-								label: "Wallet Load",
-								amount: data.amount * 100,
-							},
-						],
-						product_details: [
-							{
-								identity: "anpr-wallet-load",
-								name: "ANPR Wallet Load",
-								total_price: data.amount * 100,
-								quantity: 1,
-								unit_price: data.amount * 100,
-							},
-						],
-					}),
-				});
+		const response = await (
+			await fetch("/api/payment", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					orderId,
+					paymentId,
+					amount: data.amount * 100,
+					provider: data.provider,
+					name: currentUser?.displayName ?? "",
+					email: currentUser?.email ?? "",
+				}),
+			})
+		).json();
 
-				const { pidx, payment_url: paymentUrl } = await response.json();
+		switch (response.provider as "KHALTI" | "STRIPE" | "ESEWA") {
+			case "KHALTI":
+				if (!response.paymentUrl || !response.pidx) {
+					toast.error("Khalti payment failed");
+					return;
+				}
 
 				await setDoc(
 					doc(db, "orders", orderId, "payments", paymentId),
 					{
-						pidx,
+						pidx: response.pidx,
 					},
 					{
 						merge: true,
 					}
 				);
 
-				window.location.assign(paymentUrl as URL);
+				window.location.assign(response.paymentUrl as URL);
+				break;
+
+			case "ESEWA":
+				if (!response.amt || !response.tAmt || !response.pid || !response.scd) {
+					toast.error("Esewa payment failed");
+					return;
+				}
+
+				await setDoc(
+					doc(db, "orders", orderId, "payments", paymentId),
+					{
+						pidx: nanoid(),
+					},
+					{
+						merge: true,
+					}
+				);
+
+				const params = {
+					amt: response.amt,
+					psc: response.psc,
+					pdc: response.pdc,
+					txAmt: response.txAmt,
+					tAmt: response.tAmt,
+					pid: response.pid,
+					scd: response.scd,
+					su: `${process.env.CLIENT_URL}/payment`,
+					fu: `${process.env.CLIENT_URL}/payment?orderId=${orderId}`,
+				};
+
+				const form = document.createElement("form");
+				form.setAttribute("method", "POST");
+				form.setAttribute("action", "https://uat.esewa.com.np/epay/main");
+
+				Object.keys(params).forEach((key) => {
+					const hiddenField = document.createElement("input");
+					hiddenField.setAttribute("type", "hidden");
+					hiddenField.setAttribute("name", key);
+					hiddenField.setAttribute(
+						"value",
+						params[key as keyof typeof params] as string
+					);
+					form.appendChild(hiddenField);
+				});
+
+				document.body.appendChild(form);
+				form.submit();
+				break;
+
+			case "STRIPE":
+				if (!response.paymentUrl || !response.pidx) {
+					toast.error("Stripe payment failed");
+					return;
+				}
+
+				await setDoc(
+					doc(db, "orders", orderId, "payments", paymentId),
+					{
+						pidx: response.pidx,
+					},
+					{
+						merge: true,
+					}
+				);
+
+				window.location.assign(response.paymentUrl as URL);
 				break;
 
 			default:
-				toast.error("Provider not yet supported");
 				break;
 		}
 	};

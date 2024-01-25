@@ -17,14 +17,16 @@ export interface Order {
 	id: string;
 	userId: string;
 	amount: number;
+	status: "COMPLETED" | "PAID" | "REJECTED" | "PENDING";
 }
 
 export interface Payment {
+	id: string;
 	pidx?: string;
 	orderId: string;
 	userId: string;
 	refunded: boolean;
-	status: "PENDING" | "COMPLETED" | "FAILED";
+	status: "PENDING" | "COMPLETED" | "FAILED" | "INITIATED" | "REFUNDED";
 	totalAmount: number;
 	createdAt: Timestamp | FieldValue;
 }

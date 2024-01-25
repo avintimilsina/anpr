@@ -3,3 +3,6 @@ notebooks/cnn_dataset
 mjsynth.tar.gz
 mjsynth.tar
 
+# local env files
+.env*.local
+.env
