@@ -6,3 +6,4 @@ mjsynth.tar
 # local env files
 .env*.local
 .env
+venv

@@ -50,29 +50,29 @@ const possibleStates = [
 ] as const;
 
 const vehicleFormSchema = z.object({
-	type: z.enum(possibleTypes),
-	ageIdentifier: z.string().min(2).max(2).toUpperCase(),
-	number: z.coerce.number().min(0).max(9999),
-	state: z.enum(possibleStates),
-	bluebook: z.string().url(),
-	license: z.string().url(),
+	vehicleType: z.enum(possibleTypes),
+	vehicleAgeIdentifier: z.string().min(2).max(2).toUpperCase(),
+	vehicleNumber: z.coerce.number().min(0).max(9999),
+	vehicleState: z.enum(possibleStates),
+	vehicleBluebook: z.string().url(),
+	driverLicense: z.string().url(),
 });
 
 type VehicleFormValues = z.infer<typeof vehicleFormSchema>;
 
 const VehicleForm = () => {
-	const { getValues } = useForm<VehicleFormValues>();
-
+	
 	const form = useForm<VehicleFormValues>({
 		resolver: zodResolver(vehicleFormSchema),
 		defaultValues: {
-			type: undefined,
-			ageIdentifier: "",
-			number: undefined,
-			state: undefined,
+			vehicleType: undefined,
+			vehicleAgeIdentifier: "",
+			vehicleNumber: undefined,
+			vehicleState: undefined,
 		},
 	});
-
+	
+	const { formState } = useForm<VehicleFormValues>();
 	const onSubmit = async (_data: VehicleFormValues) => {};
 
 	return (
@@ -84,7 +84,7 @@ const VehicleForm = () => {
 				>
 					<FormField
 						control={form.control}
-						name="type"
+						name="vehicleType"
 						render={({ field }) => (
 							<FormItem className="flex flex-col">
 								<FormLabel>Vehicle Type</FormLabel>
@@ -100,7 +100,7 @@ const VehicleForm = () => {
 												)}
 											>
 												{field.value
-													? possibleTypes.find((type) => type === field.value)
+													? possibleTypes.find((vehicleType) => vehicleType === field.value)
 													: "Select Vechile Type"}
 												<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 											</Button>
@@ -111,44 +111,41 @@ const VehicleForm = () => {
 											<CommandInput placeholder="Search vehicle type..." />
 											<CommandEmpty>No vechile found.</CommandEmpty>
 											<CommandGroup>
-												{possibleTypes.map((type) => (
+												{possibleTypes.map((vehicleType) => (
 													<CommandItem
-														value={type}
-														key={type}
+														value={vehicleType}
+														key={vehicleType}
 														onSelect={() => {
-															form.setValue("type", type);
+															form.setValue("vehicleType", vehicleType);
 														}}
 													>
 														<Check
 															className={cn(
 																"mr-2 h-4 w-4",
-																type === field.value
+																vehicleType === field.value
 																	? "opacity-100"
 																	: "opacity-0"
 															)}
 														/>
-														{type}
+														{vehicleType}
 													</CommandItem>
 												))}
 											</CommandGroup>
 										</Command>
 									</PopoverContent>
 								</Popover>
-								{/* <FormDescription>
-								This is the vechile type that will be used in the dashboard.
-							</FormDescription> */}
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
 					<FormField
 						control={form.control}
-						name="ageIdentifier"
+						name="vehicleAgeIdentifier"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Age Identifier</FormLabel>
 								<FormControl>
-									<Input placeholder="AA" {...field} maxLength={2} />
+									<Input placeholder="AA" {...field} maxLength={2} value={field.value.toUpperCase()} pattern="[A-Z]{2}"/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -156,7 +153,7 @@ const VehicleForm = () => {
 					/>
 					<FormField
 						control={form.control}
-						name="number"
+						name="vehicleNumber"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Vehicle Number</FormLabel>
@@ -169,7 +166,7 @@ const VehicleForm = () => {
 					/>
 					<FormField
 						control={form.control}
-						name="state"
+						name="vehicleState"
 						render={({ field }) => (
 							<FormItem className="flex flex-col">
 								<FormLabel>State</FormLabel>
@@ -186,7 +183,7 @@ const VehicleForm = () => {
 											>
 												{field.value
 													? possibleStates.find(
-															(state) => state === field.value
+															(vehicleState) => vehicleState === field.value
 														)
 													: "Select State"}
 												<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -198,55 +195,55 @@ const VehicleForm = () => {
 											<CommandInput placeholder="Search state..." />
 											<CommandEmpty>No state found.</CommandEmpty>
 											<CommandGroup>
-												{possibleStates.map((state) => (
+												{possibleStates.map((vehicleState) => (
 													<CommandItem
-														value={state}
-														key={state}
+														value={vehicleState}
+														key={vehicleState}
 														onSelect={() => {
-															form.setValue("state", state);
+															form.setValue("vehicleState", vehicleState);
 														}}
 													>
 														<Check
 															className={cn(
 																"mr-2 h-4 w-4",
-																state === field.value
+																vehicleState === field.value
 																	? "opacity-100"
 																	: "opacity-0"
 															)}
 														/>
-														{state}
+														{vehicleState}
 													</CommandItem>
 												))}
 											</CommandGroup>
 										</Command>
 									</PopoverContent>
 								</Popover>
-								{/* <FormDescription>
-								This is the state that will be used in the dashboard.
-							</FormDescription> */}
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
 				</div>
-				<div className="mt-5 flex w-full flex-col items-center">
+				
+			</form>
+			
+			<div className="mt-5 flex w-full flex-col items-center">
 					<div className="text-xl font-semibold">Licence Plate Preview</div>
 					<div className="flex flex-col items-center p-8 px-8">
-						<div>{getValues().state}Bagmati </div>
+						<div>{form.watch("vehicleState") ?? "Bagmati"} </div>
 						<div className="bg-wavy flex h-full flex-row items-center justify-center gap-4 text-black">
 							<div className="flex flex-row items-center gap-4">
-								<h2 className="text-4xl">{getValues().type}B</h2>
-								<h2 className="text-4xl">{getValues().ageIdentifier}DE</h2>
-								<h2 className="text-4xl">{getValues().number}1234</h2>
+								<h2 className="text-4xl" >{form.watch("vehicleType") ?? "B"}</h2>
+								<h2 className="text-4xl">{form.watch("vehicleAgeIdentifier").toLocaleUpperCase() || "DE"}</h2>
+								<h2 className="text-4xl">{form.watch("vehicleNumber") ?? "1234"}</h2>
 							</div>
 						</div>
-						{/* <p className="label-text text-center italic">
-							Make sure the note apperarnce matches the preview here.
-						</p> */}
+						<p className="label-text text-center italic">
+							Make sure the licence plate  apperarnce matches the preview here.
+						</p>
 					</div>
 				</div>
-			</form>
 		</Form>
+		
 	);
 };
 
