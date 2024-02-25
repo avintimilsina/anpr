@@ -22,8 +22,8 @@ export default async function handler(
 		return;
 	}
 
+	// Khalti Payment
 	if (req.body.pidx) {
-		// Khalti Payment
 		const resposne = await fetch(
 			"https://a.khalti.com/api/v2/epayment/lookup/",
 			{
@@ -121,6 +121,7 @@ export default async function handler(
 					});
 				});
 			}
+			res.status(200).json({ success: true });
 		} else if (orderDetail.data()?.status === "PAID") {
 			console.log("PAID Ran");
 			await db.runTransaction(async (t) => {
@@ -137,6 +138,7 @@ export default async function handler(
 					status: "COMPLETED",
 				});
 			});
+			res.status(200).json({ success: true });
 		}
 	} else if (req.body.refId) {
 		// Esewa Payment
@@ -212,6 +214,7 @@ export default async function handler(
 				});
 			});
 		}
+		res.status(200).json({ success: true });
 	}
 
 	res.status(200).json({ success: true });

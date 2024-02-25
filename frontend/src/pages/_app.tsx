@@ -121,10 +121,10 @@ export default App;
 // // Profile page data update in database
 // Schema Define garnu paryo
 // // Predifined Theme halnu paryo
-// Navbar ma  wallet ma kati paisa xa vanera pani dekhaunu paryo
-// Paisa load garne option hunu paryo
-// Khalti Esewa Stripe
-// Email Verification
+// // Navbar ma  wallet ma kati paisa xa vanera pani dekhaunu paryo
+// // Paisa load garne option hunu paryo
+// // Khalti Esewa Stripe
+// // Email Verification
 // (admin side)video upload garne page dinu paryo
 
 // avin 2 4hr

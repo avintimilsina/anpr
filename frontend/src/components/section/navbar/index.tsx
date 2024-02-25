@@ -21,6 +21,7 @@ const Navbar = () => {
 					<nav className="hidden gap-6 md:flex">
 						{NAVBAR.map(({ href, title }) => (
 							<Link
+								key={`nav-${href}-title-${title}`}
 								className="hover:text-foreground/80 text-foreground/60 flex items-center text-lg font-medium transition-colors sm:text-sm"
 								href={href}
 							>
