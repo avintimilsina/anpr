@@ -20,7 +20,7 @@ const LicensePlatePreview = ({
 	vehicleAgeIdentifier: string;
 	vehicleNumber: number;
 }) => (
-	<div className="bg-wavy flex w-full flex-col items-center ">
+	<div className="bg-wavy flex w-full flex-col items-center rounded-3xl border-4 border-black  text-black">
 		<div className="flex flex-row gap-4">
 			<Image alt="Nepal Flag" src={flagsvg} height="100" width="100" />
 			<div className="flex flex-col items-center text-3xl">

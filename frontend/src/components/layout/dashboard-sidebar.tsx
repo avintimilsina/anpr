@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { DASHBOARD_NAV_ITEMS } from "@/config/navbar";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "../ui/button";
-import { DASHBOARD_NAV_ITEMS } from "@/config/navbar";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 	items: {
@@ -52,7 +53,9 @@ const DashboardLayout = ({ children }: SettingsLayoutProps) => (
 			<aside className="-mx-4 lg:w-1/5">
 				<SidebarNav items={DASHBOARD_NAV_ITEMS} />
 			</aside>
-			<div className="flex-1 lg:max-w-2xl">{children}</div>
+			<ScrollArea className="h-screen w-full pb-20">
+				<div className="flex-1 lg:max-w-2xl">{children}</div>
+			</ScrollArea>
 		</div>
 	</div>
 );

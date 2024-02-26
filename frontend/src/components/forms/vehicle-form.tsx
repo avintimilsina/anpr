@@ -71,9 +71,10 @@ interface VehicleFormProps {
 	initialValues?: VehicleFormValues & {
 		id: string;
 	};
+	onSuccess?: () => void;
 }
 
-const VehicleForm = ({ initialValues }: VehicleFormProps) => {
+const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
 	const [currentUser] = useAuthState(auth);
 	const form = useForm<VehicleFormValues>({
 		resolver: zodResolver(vehicleFormSchema),
@@ -98,11 +99,15 @@ const VehicleForm = ({ initialValues }: VehicleFormProps) => {
 					id: vehicleId,
 					...data,
 					uid: currentUser?.uid,
-					status:"PENDING"
+					status: "PENDING",
 				}),
 				{
 					loading: "Saving...",
-					success: "Saved!",
+					success: () => {
+						form.reset();
+						onSuccess?.();
+						return "Saved successfully";
+					},
 					error: "Failed to save",
 				}
 			);
@@ -119,7 +124,7 @@ const VehicleForm = ({ initialValues }: VehicleFormProps) => {
 			/>
 
 			<form onSubmit={form.handleSubmit(onSubmit)}>
-				<div className="flex flex-row items-center justify-center gap-2 md:flex-row">
+				<div className="flex flex-row items-end justify-center gap-2 md:flex-row">
 					<FormField
 						control={form.control}
 						name="vehicleType"
