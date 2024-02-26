@@ -1,5 +1,0 @@
-lapx==0.5.2
-easyocr
-ast
-glob
-ultralytics
