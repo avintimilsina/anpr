@@ -98,6 +98,7 @@ const VehicleForm = ({ initialValues }: VehicleFormProps) => {
 					id: vehicleId,
 					...data,
 					uid: currentUser?.uid,
+					status:"PENDING"
 				}),
 				{
 					loading: "Saving...",
@@ -140,7 +141,7 @@ const VehicleForm = ({ initialValues }: VehicleFormProps) => {
 													? possibleTypes.find(
 															(vehicleType) => vehicleType === field.value
 														)
-													: "Select Vechile Type"}
+													: "Select Vehicle Type"}
 												<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 											</Button>
 										</FormControl>
@@ -148,7 +149,7 @@ const VehicleForm = ({ initialValues }: VehicleFormProps) => {
 									<PopoverContent className="w-[200px] p-0">
 										<Command>
 											<CommandInput placeholder="Search vehicle type..." />
-											<CommandEmpty>No vechile found.</CommandEmpty>
+											<CommandEmpty>No vehicle found.</CommandEmpty>
 											<CommandGroup>
 												{possibleTypes.map((vehicleType) => (
 													<CommandItem

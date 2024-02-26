@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { auth } from "../../../firebase";
+import Dropzone from "../shared/dropzone";
 
 const profileFormSchema = z.object({
 	email: z
@@ -102,6 +104,54 @@ const ProfileForm = () => {
 						</FormItem>
 					)}
 				/>
+				<FormField
+					control={form.control}
+					name="licenseNumber"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>License Number</FormLabel>
+							<FormControl>
+								<Input placeholder="XX-XX-XXXXXXX" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="licenseImage"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>License Card Image</FormLabel>
+							<FormControl>
+								{field.value ? (
+									<div className="flex max-h-[112px] max-w-[112px] flex-row gap-4">
+										<Image
+											objectFit="cover"
+											alt="License Card"
+											src={field.value}
+											height="112"
+											width="112"
+										/>
+										<div className="flex flex-col justify-center">
+											<Button type="button" variant="destructive">
+												Delete
+											</Button>
+										</div>
+									</div>
+								) : (
+									<Dropzone
+										folder="license"
+										onUpload={field.onChange}
+										fileExtension="jpg"
+									/>
+								)}
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
 
 				<Button type="submit">Update profile</Button>
 			</form>

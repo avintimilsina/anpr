@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+.bg-wavy {
+	padding: 20px;
+	background-image: url("/wavy_background.webp");
+	background-repeat: repeat-x;
+	background-size: 100% 100%;
+}
+
 @layer base {
 	:root {
 		--gradient: #00467f;
