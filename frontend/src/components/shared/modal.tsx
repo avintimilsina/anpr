@@ -10,7 +10,7 @@ interface ModalProps {
 	children: React.ReactNode;
 	className?: string;
 	showModal: boolean;
-	setShowModal: () => void;
+	setShowModal: (open: boolean) => void;
 }
 
 const Modal = ({
@@ -23,7 +23,7 @@ const Modal = ({
 
 	if (isMobile) {
 		return (
-			<Drawer.Root open={showModal} onClose={setShowModal}>
+			<Drawer.Root open={showModal} onOpenChange={setShowModal}>
 				<Drawer.Overlay className="bg-background/80 fixed inset-0 z-40 backdrop-blur-sm" />
 				<Drawer.Portal>
 					<Drawer.Content
@@ -44,7 +44,12 @@ const Modal = ({
 	}
 	return (
 		<Dialog open={showModal} onOpenChange={setShowModal}>
-			<DialogContent className="overflow-hidden p-0 md:max-w-md md:rounded-2xl md:border">
+			<DialogContent
+				className={cn(
+					"overflow-hidden p-0 md:max-w-md md:rounded-2xl md:border",
+					className
+				)}
+			>
 				{children}
 			</DialogContent>
 		</Dialog>

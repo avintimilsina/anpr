@@ -9,11 +9,13 @@ import { generateId } from "@/lib/nanoid";
 
 interface DropzoneProps {
 	onUpload: (url: string) => void;
+	folder?: string;
 	className?: string;
 	fileExtension?: string;
 }
 
 const Dropzone = ({
+	folder,
 	onUpload,
 	className,
 	fileExtension,
@@ -48,7 +50,7 @@ const Dropzone = ({
 		});
 		if (file) {
 			const result = await uploadFile(
-				ref(storage, `videos/${generateId("VID")}`),
+				ref(storage, `${folder}/${generateId("VID")}`),
 				file
 			);
 			if (result?.ref) {
@@ -69,6 +71,10 @@ const Dropzone = ({
 					id: "file-uplaoad",
 				});
 			}
+		} else {
+			toast.error("Something went wrong", {
+				id: "file-uplaoad",
+			});
 		}
 	};
 
@@ -133,6 +139,7 @@ const Dropzone = ({
 							</svg>
 						</div>
 						<Button
+							type="button"
 							variant="ghost"
 							size="sm"
 							className="ml-auto flex h-8 space-x-2 px-0 pl-1 text-xs"
@@ -154,7 +161,12 @@ const Dropzone = ({
 						: fileInfo && <p className="text-muted-foreground">{fileInfo}</p>}
 				</CardContent>
 			</Card>
-			<Button className="w-full" onClick={upload} type="button">
+			<Button
+				className="w-full"
+				variant="secondary"
+				onClick={upload}
+				type="button"
+			>
 				Upload file
 			</Button>
 		</div>

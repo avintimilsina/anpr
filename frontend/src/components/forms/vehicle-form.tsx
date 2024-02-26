@@ -5,6 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Check, ChevronsUpDown } from "lucide-react";
+import Image from "next/image";
+import { toast } from "sonner";
+import { doc, setDoc } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -24,6 +28,9 @@ import {
 } from "../ui/command";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
+import Dropzone from "../shared/dropzone";
+import LicensePlatePreview from "../cards/plate-preview";
+import { auth, db } from "../../../firebase";
 
 const possibleTypes = [
 	"A",
@@ -55,13 +62,19 @@ const vehicleFormSchema = z.object({
 	vehicleNumber: z.coerce.number().min(0).max(9999),
 	vehicleState: z.enum(possibleStates),
 	vehicleBluebook: z.string().url(),
-	driverLicense: z.string().url(),
+	// driverLicense: z.string().url(),
 });
 
 type VehicleFormValues = z.infer<typeof vehicleFormSchema>;
 
-const VehicleForm = () => {
-	
+interface VehicleFormProps {
+	initialValues?: VehicleFormValues & {
+		id: string;
+	};
+}
+
+const VehicleForm = ({ initialValues }: VehicleFormProps) => {
+	const [currentUser] = useAuthState(auth);
 	const form = useForm<VehicleFormValues>({
 		resolver: zodResolver(vehicleFormSchema),
 		defaultValues: {
@@ -71,17 +84,41 @@ const VehicleForm = () => {
 			vehicleState: undefined,
 		},
 	});
-	
-	const { formState } = useForm<VehicleFormValues>();
-	const onSubmit = async (_data: VehicleFormValues) => {};
+
+	const onSubmit = async (data: VehicleFormValues) => {
+		if (initialValues) {
+			toast.info("Form update goes here", {
+				id: "vehicle-form",
+			});
+		} else {
+			const vehicleId = `${data.vehicleType}-${data.vehicleAgeIdentifier}-${data.vehicleNumber}`;
+
+			toast.promise(
+				setDoc(doc(db, "vehicles", vehicleId), {
+					id: vehicleId,
+					...data,
+					uid: currentUser?.uid,
+				}),
+				{
+					loading: "Saving...",
+					success: "Saved!",
+					error: "Failed to save",
+				}
+			);
+		}
+	};
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="">
-				<div
-					className="flex flex-row items-center justify-center gap-2
- "
-				>
+			<LicensePlatePreview
+				vehicleAgeIdentifier={form.watch("vehicleAgeIdentifier")}
+				vehicleNumber={form.watch("vehicleNumber")}
+				vehicleState={form.watch("vehicleState")}
+				vehicleType={form.watch("vehicleType")}
+			/>
+
+			<form onSubmit={form.handleSubmit(onSubmit)}>
+				<div className="flex flex-row items-center justify-center gap-2 md:flex-row">
 					<FormField
 						control={form.control}
 						name="vehicleType"
@@ -100,7 +137,9 @@ const VehicleForm = () => {
 												)}
 											>
 												{field.value
-													? possibleTypes.find((vehicleType) => vehicleType === field.value)
+													? possibleTypes.find(
+															(vehicleType) => vehicleType === field.value
+														)
 													: "Select Vechile Type"}
 												<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 											</Button>
@@ -145,7 +184,13 @@ const VehicleForm = () => {
 							<FormItem>
 								<FormLabel>Age Identifier</FormLabel>
 								<FormControl>
-									<Input placeholder="AA" {...field} maxLength={2} value={field.value.toUpperCase()} pattern="[A-Z]{2}"/>
+									<Input
+										placeholder="AA"
+										{...field}
+										maxLength={2}
+										value={field.value.toUpperCase()}
+										pattern="[A-Z]{2}"
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -223,27 +268,56 @@ const VehicleForm = () => {
 						)}
 					/>
 				</div>
-				
+				<FormField
+					control={form.control}
+					name="vehicleBluebook"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Vehicle Bluebook Image</FormLabel>
+							<FormControl>
+								{field.value ? (
+									<div className="flex max-h-[112px] max-w-[112px] flex-row gap-4">
+										<Image
+											objectFit="cover"
+											alt="Bluebook"
+											src={field.value}
+											height="112"
+											width="112"
+										/>
+										<div className="flex flex-col justify-center">
+											<Button type="button" variant="destructive">
+												Delete
+											</Button>
+										</div>
+									</div>
+								) : (
+									<Dropzone
+										folder="bluebook"
+										onUpload={field.onChange}
+										fileExtension="jpg"
+									/>
+								)}
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				{/* <FormField
+					control={form.control}
+					name="driverLicense"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Driver License Image</FormLabel>
+							<FormControl>
+								<Dropzone onUpload={field.onChange} fileExtension="jpg" />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/> */}
+				<Button type="submit">Add New Vehicle</Button>
 			</form>
-			
-			<div className="mt-5 flex w-full flex-col items-center">
-					<div className="text-xl font-semibold">Licence Plate Preview</div>
-					<div className="flex flex-col items-center p-8 px-8">
-						<div>{form.watch("vehicleState") ?? "Bagmati"} </div>
-						<div className="bg-wavy flex h-full flex-row items-center justify-center gap-4 text-black">
-							<div className="flex flex-row items-center gap-4">
-								<h2 className="text-4xl" >{form.watch("vehicleType") ?? "B"}</h2>
-								<h2 className="text-4xl">{form.watch("vehicleAgeIdentifier").toLocaleUpperCase() || "DE"}</h2>
-								<h2 className="text-4xl">{form.watch("vehicleNumber") ?? "1234"}</h2>
-							</div>
-						</div>
-						<p className="label-text text-center italic">
-							Make sure the licence plate  apperarnce matches the preview here.
-						</p>
-					</div>
-				</div>
 		</Form>
-		
 	);
 };
 

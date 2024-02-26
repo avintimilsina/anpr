@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type ReactNode, useState } from "react";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,8 +10,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-	DASHBOARD_NAV_ITEMS_BOTTOM,
-	DASHBOARD_NAV_ITEMS_TOP,
+	ADMIN_DASHBOARD_NAV_ITEMS_BOTTOM,
+	ADMIN_DASHBOARD_NAV_ITEMS_TOP,
 } from "@/config/navbar";
 import DashboardNav from "../section/navbar/dashboard-nav";
 
@@ -35,7 +36,7 @@ const Sidebar = ({
 						sizes
 					)}`;
 				}}
-				className="h-full max-h-[800px] items-stretch"
+				className="h-full items-stretch"
 			>
 				<ResizablePanel
 					defaultSize={defaultLayout[0]}
@@ -77,12 +78,12 @@ const Sidebar = ({
 							)}
 							<DashboardNav
 								isCollapsed={isCollapsed}
-								links={DASHBOARD_NAV_ITEMS_TOP}
+								links={ADMIN_DASHBOARD_NAV_ITEMS_TOP}
 							/>
 							<Separator />
 							<DashboardNav
 								isCollapsed={isCollapsed}
-								links={DASHBOARD_NAV_ITEMS_BOTTOM}
+								links={ADMIN_DASHBOARD_NAV_ITEMS_BOTTOM}
 							/>
 						</div>
 					</div>

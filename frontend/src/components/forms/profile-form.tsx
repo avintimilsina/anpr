@@ -29,6 +29,10 @@ const profileFormSchema = z.object({
 	name: z.string().min(1, {
 		message: "Name is required",
 	}),
+	licenseNumber: z.string().min(1, {
+		message: "License number is required",
+	}),
+	licenseImage: z.string().url(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -43,6 +47,8 @@ const ProfileForm = () => {
 		defaultValues: {
 			email: currentUser?.email ?? "",
 			name: currentUser?.displayName ?? "",
+			licenseNumber: "",
+			licenseImage: "",
 		},
 		mode: "onChange",
 	});

@@ -2,9 +2,13 @@ import { type FieldValue, type Timestamp } from "firebase/firestore";
 
 export interface Vehicle {
 	id: string;
-	make: string;
-	model: string;
-	year?: number;
+	uid: string;
+	vehicleAgeIdentifier: string;
+	vehicleBluebook: string;
+	vehicleNumber: number;
+	vehicleState: string;
+	vehicleType: string;
+	status: "PENDING" | "VERIFIED" | "REJECTED";
 }
 
 export interface User {

@@ -19,6 +19,7 @@ import { auth, db } from "../../firebase";
 import Sidebar from "@/components/layout/admin-sidebar";
 import Navbar from "@/components/section/navbar";
 import ModalProvider from "@/components/modal-provider";
+import DashboardLayout from "@/components/layout/dashboard-sidebar";
 
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
@@ -66,6 +67,34 @@ const App = ({ Component, pageProps }: AppProps) => {
 		return unsubscribe;
 	}, []);
 
+	if (router.pathname.startsWith("/dashboard")) {
+		return (
+			<ThemeProvider
+				attribute="class"
+				defaultTheme="system"
+				enableSystem
+				disableTransitionOnChange
+			>
+				<NextIntlClientProvider
+					locale={router.locale}
+					timeZone="UTC"
+					messages={pageProps.messages}
+				>
+					<Navbar />
+					<div className="flex h-screen overflow-hidden">
+						<DashboardLayout>
+							<main className="flex-1 overflow-y-auto overflow-x-hidden">
+								<Component {...pageProps} />
+							</main>
+						</DashboardLayout>
+					</div>
+					<ModalProvider />
+					<Toaster richColors />
+				</NextIntlClientProvider>
+			</ThemeProvider>
+		);
+	}
+
 	if (router.pathname.startsWith("/admin")) {
 		return (
 			<ThemeProvider
@@ -82,7 +111,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 					<Navbar />
 					<div className="flex h-screen overflow-hidden">
 						<Sidebar>
-							<main className=" flex-1 overflow-y-auto overflow-x-hidden pt-16">
+							<main className="flex-1 overflow-y-auto overflow-x-hidden pt-16">
 								<Component {...pageProps} />
 							</main>
 						</Sidebar>

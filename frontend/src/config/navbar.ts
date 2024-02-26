@@ -22,12 +22,18 @@ export const NAVBAR: NavItem[] = [
 	},
 ];
 
-export const DASHBOARD_NAV_ITEMS_TOP: NavItem[] = [
+export const ADMIN_DASHBOARD_NAV_ITEMS_TOP: NavItem[] = [
 	{
 		title: "Dashboard",
 		href: "/admin",
 		icon: "dashboard",
 		key: "dashboard",
+	},
+	{
+		title: "Vehicle",
+		href: "/admin/vehicle",
+		icon: "dashboard",
+		key: "vehicle",
 	},
 	{
 		title: "Profile",
@@ -37,11 +43,29 @@ export const DASHBOARD_NAV_ITEMS_TOP: NavItem[] = [
 	},
 ];
 
-export const DASHBOARD_NAV_ITEMS_BOTTOM: NavItem[] = [
+export const ADMIN_DASHBOARD_NAV_ITEMS_BOTTOM: NavItem[] = [
 	{
 		title: "Login",
 		href: "/auth/login",
 		icon: "login",
 		key: "login",
+	},
+];
+
+export const DASHBOARD_NAV_ITEMS: NavItem[] = [
+	{
+		title: "Dashboard",
+		href: "/dashboard",
+		key: "dashboard",
+	},
+	{
+		title: "Profile",
+		href: "/dashboard/profile",
+		key: "profile",
+	},
+	{
+		title: "Vehicles",
+		href: "/dashboard/vehicle",
+		key: "vehicle",
 	},
 ];
