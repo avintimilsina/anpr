@@ -1,3 +1,9 @@
 Flask
 Flask-Cors
 gunicorn
+opencv-python
+easyocr
+numpy
+pandas
+pyarrow
+ultralytics

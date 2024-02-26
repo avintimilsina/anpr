@@ -1,8 +1,6 @@
 import ast
 import cv2 as cv
 import easyocr
-from glob import glob
-import numpy as np
 import pandas as pd
 import string
 from ultralytics import YOLO
