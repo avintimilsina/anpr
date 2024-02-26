@@ -24,17 +24,28 @@ results_df = pd.DataFrame(columns=['frame_number', 'track_id', 'car_bbox', 'car_
 def license_complies_format(text):
     if len(text) != 7:
         return False
-    return all(
-        (text[i] in string.ascii_uppercase or text[i] in dict_int_to_char.keys()) if i < 3 else
-        (text[i] in string.ascii_uppercase or text[i] in dict_int_to_char.keys() or
-         text[i] in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] or text[i] in dict_char_to_int.keys())
-        for i in range(7)
-    )
+    if (text[0] in string.ascii_uppercase or text[0] in dict_int_to_char.keys()) and \
+       (text[1] in string.ascii_uppercase or text[1] in dict_int_to_char.keys()) and \
+       (text[2] in string.ascii_uppercase or text[2] in dict_int_to_char.keys()) and \
+       (text[3] in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] or text[3] in dict_char_to_int.keys()) and \
+       (text[4] in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] or text[4] in dict_char_to_int.keys()) and \
+       (text[5] in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] or text[5] in dict_char_to_int.keys()) and \
+       (text[6] in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] or text[6] in dict_char_to_int.keys()):
+        return True
+    else:
+        return False
 
 def format_license(text):
+    license_plate_ = ''
     mapping = {0: dict_int_to_char, 1: dict_int_to_char, 4: dict_char_to_int, 5: dict_char_to_int, 6: dict_char_to_int,
                2: dict_int_to_char, 3: dict_char_to_int}
-    return ''.join(mapping[i][text[i]] if text[i] in mapping[i] else text[i] for i in range(7))
+    for j in [0, 1, 2, 3, 4, 5, 6]:
+        if text[j] in mapping[j].keys():
+            license_plate_ += mapping[j][text[j]]
+        else:
+            license_plate_ += text[j]
+
+    return license_plate_
 
 def read_license_plate(license_plate_crop):
     detections = reader.readtext(license_plate_crop)
@@ -110,7 +121,11 @@ def api():
                       on='license_plate_number', how='inner')
     max_license_score_row = result.loc[result.groupby('track_id')['license_text_score'].idxmax()]
 
-    return jsonify(max_license_score_row.to_dict())
+    average_time_per_track = results_df.groupby('track_id')['frame_number'].mean()
+    max_license_score_row['average_time'] = (max_license_score_row['track_id'].map(average_time_per_track))/30
+
+    return jsonify(max_license_score_row[['license_plate_number', 'license_text_score', 'track_id', 'average_time']].to_dict())
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=9696)
