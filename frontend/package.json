@@ -27,6 +27,7 @@
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.0",
 		"cmdk": "^0.2.0",
+		"dayjs": "^1.11.10",
 		"firebase": "^10.7.1",
 		"firebase-admin": "^12.0.0",
 		"lucide-react": "^0.307.0",

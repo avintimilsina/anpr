@@ -5,9 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Check, ChevronsUpDown } from "lucide-react";
-import Image from "next/image";
 import { toast } from "sonner";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,9 +27,9 @@ import {
 } from "../ui/command";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
-import Dropzone from "../shared/dropzone";
-import LicensePlatePreview from "../cards/plate-preview";
 import { auth, db } from "../../../firebase";
+import { type Parking } from "@/db/schema";
+import { generateId } from "@/lib/nanoid";
 
 const possibleTypes = [
 	"A",
@@ -56,28 +55,26 @@ const possibleStates = [
 	"Sudurpaschim",
 ] as const;
 
-const vehicleFormSchema = z.object({
+const parkingFormSchema = z.object({
 	vehicleType: z.enum(possibleTypes),
 	vehicleAgeIdentifier: z.string().min(2).max(2).toUpperCase(),
 	vehicleNumber: z.coerce.number().min(0).max(9999),
 	vehicleState: z.enum(possibleStates),
-	vehicleBluebook: z.string().url(),
-	// driverLicense: z.string().url(),
 });
 
-type VehicleFormValues = z.infer<typeof vehicleFormSchema>;
+type ParkingFormValues = z.infer<typeof parkingFormSchema>;
 
-interface VehicleFormProps {
-	initialValues?: VehicleFormValues & {
+interface ParkingFormProps {
+	initialValues?: ParkingFormValues & {
 		id: string;
 	};
 	onSuccess?: () => void;
 }
 
-const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
+const ParkingForm = ({ initialValues, onSuccess }: ParkingFormProps) => {
 	const [currentUser] = useAuthState(auth);
-	const form = useForm<VehicleFormValues>({
-		resolver: zodResolver(vehicleFormSchema),
+	const form = useForm<ParkingFormValues>({
+		resolver: zodResolver(parkingFormSchema),
 		defaultValues: {
 			vehicleType: undefined,
 			vehicleAgeIdentifier: "",
@@ -86,31 +83,39 @@ const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
 		},
 	});
 
-	const onSubmit = async (data: VehicleFormValues) => {
+	const onSubmit = async (data: ParkingFormValues) => {
+		if (!currentUser?.uid) {
+			toast.error("Not Logged In");
+			return;
+		}
+
 		if (initialValues) {
 			toast.info("Form update goes here", {
-				id: "vehicle-form",
+				id: "parking-form",
 			});
 		} else {
+			const parkingId = generateId("PARKING");
 			const vehicleId = `${data.vehicleState.toUpperCase()}-${
 				data.vehicleType
 			}-${data.vehicleAgeIdentifier}-${data.vehicleNumber}`;
 
 			toast.promise(
-				setDoc(doc(db, "vehicles", vehicleId), {
-					id: vehicleId,
-					...data,
+				setDoc(doc(db, "parkings", parkingId), {
+					id: parkingId,
+					entry: serverTimestamp(),
+					vehicleId,
+					createdAt: serverTimestamp(),
 					uid: currentUser?.uid,
-					status: "PENDING",
-				}),
+					status: "PARKED",
+				} satisfies Parking),
 				{
 					loading: "Saving...",
 					success: () => {
 						form.reset();
 						onSuccess?.();
-						return "Saved successfully";
+						return "Parked successfully";
 					},
-					error: "Failed to save",
+					error: "Failed to Park",
 				}
 			);
 		}
@@ -118,15 +123,66 @@ const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
 
 	return (
 		<Form {...form}>
-			<LicensePlatePreview
-				vehicleAgeIdentifier={form.watch("vehicleAgeIdentifier")}
-				vehicleNumber={form.watch("vehicleNumber")}
-				vehicleState={form.watch("vehicleState")}
-				vehicleType={form.watch("vehicleType")}
-			/>
-
 			<form onSubmit={form.handleSubmit(onSubmit)}>
-				<div className="flex flex-row items-end justify-center gap-2 md:flex-row">
+				<div className="grid w-full grid-cols-1 justify-center gap-4 md:grid-cols-2">
+					<FormField
+						control={form.control}
+						name="vehicleState"
+						render={({ field }) => (
+							<FormItem className="flex flex-col">
+								<FormLabel>State</FormLabel>
+								<Popover>
+									<PopoverTrigger asChild>
+										<FormControl>
+											<Button
+												variant="outline"
+												role="combobox"
+												className={cn(
+													"justify-between",
+													!field.value && "text-muted-foreground"
+												)}
+											>
+												{field.value
+													? possibleStates.find(
+															(vehicleState) => vehicleState === field.value
+														)
+													: "Select State"}
+												<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+											</Button>
+										</FormControl>
+									</PopoverTrigger>
+									<PopoverContent className="p-0">
+										<Command>
+											<CommandInput placeholder="Search state..." />
+											<CommandEmpty>No state found.</CommandEmpty>
+											<CommandGroup>
+												{possibleStates.map((vehicleState) => (
+													<CommandItem
+														value={vehicleState}
+														key={vehicleState}
+														onSelect={() => {
+															form.setValue("vehicleState", vehicleState);
+														}}
+													>
+														<Check
+															className={cn(
+																"mr-2 h-4 w-4",
+																vehicleState === field.value
+																	? "opacity-100"
+																	: "opacity-0"
+															)}
+														/>
+														{vehicleState}
+													</CommandItem>
+												))}
+											</CommandGroup>
+										</Command>
+									</PopoverContent>
+								</Popover>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 					<FormField
 						control={form.control}
 						name="vehicleType"
@@ -140,7 +196,7 @@ const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
 												variant="outline"
 												role="combobox"
 												className={cn(
-													"w-[200px] justify-between",
+													"justify-between",
 													!field.value && "text-muted-foreground"
 												)}
 											>
@@ -153,7 +209,7 @@ const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
 											</Button>
 										</FormControl>
 									</PopoverTrigger>
-									<PopoverContent className="w-[200px] p-0">
+									<PopoverContent className="p-0">
 										<Command>
 											<CommandInput placeholder="Search vehicle type..." />
 											<CommandEmpty>No vehicle found.</CommandEmpty>
@@ -217,116 +273,13 @@ const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name="vehicleState"
-						render={({ field }) => (
-							<FormItem className="flex flex-col">
-								<FormLabel>State</FormLabel>
-								<Popover>
-									<PopoverTrigger asChild>
-										<FormControl>
-											<Button
-												variant="outline"
-												role="combobox"
-												className={cn(
-													"w-[200px] justify-between",
-													!field.value && "text-muted-foreground"
-												)}
-											>
-												{field.value
-													? possibleStates.find(
-															(vehicleState) => vehicleState === field.value
-														)
-													: "Select State"}
-												<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-											</Button>
-										</FormControl>
-									</PopoverTrigger>
-									<PopoverContent className="w-[200px] p-0">
-										<Command>
-											<CommandInput placeholder="Search state..." />
-											<CommandEmpty>No state found.</CommandEmpty>
-											<CommandGroup>
-												{possibleStates.map((vehicleState) => (
-													<CommandItem
-														value={vehicleState}
-														key={vehicleState}
-														onSelect={() => {
-															form.setValue("vehicleState", vehicleState);
-														}}
-													>
-														<Check
-															className={cn(
-																"mr-2 h-4 w-4",
-																vehicleState === field.value
-																	? "opacity-100"
-																	: "opacity-0"
-															)}
-														/>
-														{vehicleState}
-													</CommandItem>
-												))}
-											</CommandGroup>
-										</Command>
-									</PopoverContent>
-								</Popover>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+					<Button className="col-span-2" type="submit">
+						Add New Vehicle
+					</Button>
 				</div>
-				<FormField
-					control={form.control}
-					name="vehicleBluebook"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Vehicle Bluebook Image</FormLabel>
-							<FormControl>
-								{field.value ? (
-									<div className="flex max-h-[112px] max-w-[112px] flex-row gap-4">
-										<Image
-											objectFit="cover"
-											alt="Bluebook"
-											src={field.value}
-											height="112"
-											width="112"
-										/>
-										<div className="flex flex-col justify-center">
-											<Button type="button" variant="destructive">
-												Delete
-											</Button>
-										</div>
-									</div>
-								) : (
-									<Dropzone
-										folder="bluebook"
-										onUpload={field.onChange}
-										fileExtension="jpg"
-									/>
-								)}
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				{/* <FormField
-					control={form.control}
-					name="driverLicense"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Driver License Image</FormLabel>
-							<FormControl>
-								<Dropzone onUpload={field.onChange} fileExtension="jpg" />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/> */}
-				<Button type="submit">Add New Vehicle</Button>
 			</form>
 		</Form>
 	);
 };
 
-export default VehicleForm;
+export default ParkingForm;

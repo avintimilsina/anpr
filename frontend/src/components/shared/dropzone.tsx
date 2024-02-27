@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { storage } from "../../../firebase";
 import { generateId } from "@/lib/nanoid";
+import { cn } from "@/lib/utils";
 
 interface DropzoneProps {
 	onUpload: (url: string) => void;
@@ -104,9 +105,12 @@ const Dropzone = ({
 	};
 
 	return (
-		<div className="flex flex-col gap-2">
+		<div className="flex flex-grow flex-col gap-2">
 			<Card
-				className={`bg-muted hover:border-muted-foreground/50 border-2 border-dashed hover:cursor-pointer ${className}`}
+				className={cn(
+					`bg-muted hover:border-muted-foreground/50 border-2 border-dashed hover:cursor-pointer`,
+					className
+				)}
 				{...props}
 			>
 				<CardContent

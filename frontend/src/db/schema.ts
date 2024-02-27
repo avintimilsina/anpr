@@ -11,6 +11,18 @@ export interface Vehicle {
 	status: "PENDING" | "VERIFIED" | "REJECTED";
 }
 
+export interface Parking {
+	id: string;
+	uid: string;
+	entry: Timestamp | FieldValue;
+	exit?: Timestamp | FieldValue | null;
+	status: "BOOKED" | "PARKED" | "COMPLETED";
+	vehicleId: string;
+	entryVideo?: string | null;
+	exitVideo?: string | null;
+	createdAt: Timestamp | FieldValue;
+}
+
 export interface User {
 	id: string;
 	email: string;
