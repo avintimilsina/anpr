@@ -39,7 +39,7 @@ const VehiclePage = () => {
 	}
 
 	return (
-		<div>
+		<div className="max-w-2xl">
 			<div className="flex flex-row items-center justify-between">
 				<div className="space-y-0.5">
 					<h2 className="text-2xl font-bold tracking-tight">Vehicles</h2>

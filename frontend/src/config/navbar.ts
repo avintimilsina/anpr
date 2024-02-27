@@ -29,6 +29,7 @@ export const ADMIN_DASHBOARD_NAV_ITEMS_TOP: NavItem[] = [
 		icon: "dashboard",
 		key: "dashboard",
 	},
+
 	{
 		title: "Vehicle",
 		href: "/admin/vehicle",
@@ -59,13 +60,18 @@ export const DASHBOARD_NAV_ITEMS: NavItem[] = [
 		key: "dashboard",
 	},
 	{
-		title: "Profile",
-		href: "/dashboard/profile",
-		key: "profile",
+		title: "Parking",
+		href: "/dashboard/parking",
+		key: "parking",
 	},
 	{
 		title: "Vehicles",
 		href: "/dashboard/vehicle",
 		key: "vehicle",
+	},
+	{
+		title: "Profile",
+		href: "/dashboard/profile",
+		key: "profile",
 	},
 ];

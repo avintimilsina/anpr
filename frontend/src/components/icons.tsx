@@ -31,7 +31,7 @@ import {
 	LuPackage,
 } from "react-icons/lu";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
-import { IoFastFood } from "react-icons/io5";
+import { IoCarOutline, IoFastFood } from "react-icons/io5";
 
 export const Icons = {
 	dashboard: LuLayoutDashboard,
@@ -66,6 +66,7 @@ export const Icons = {
 	menu: MdOutlineRestaurantMenu,
 	item: IoFastFood,
 	order: LuPackage,
+	parking: IoCarOutline,
 };
 
 export type Icon = keyof typeof Icons;

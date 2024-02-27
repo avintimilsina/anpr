@@ -23,7 +23,7 @@ export interface Parking {
 	uid: string;
 	entry: Timestamp | FieldValue;
 	exit?: Timestamp | FieldValue | null;
-	status: "BOOKED" | "PARKED" | "COMPLETED";
+	status: "BOOKED" | "PARKED" | "COMPLETED" | "CANCELLED";
 	vehicleId: string;
 	entryVideo?: string | null;
 	exitVideo?: string | null;

@@ -54,7 +54,7 @@ const DashboardLayout = ({ children }: SettingsLayoutProps) => (
 				<SidebarNav items={DASHBOARD_NAV_ITEMS} />
 			</aside>
 			<ScrollArea className="h-screen w-full pb-20">
-				<div className="flex-1 lg:max-w-2xl">{children}</div>
+				<div className="flex-1">{children}</div>
 			</ScrollArea>
 		</div>
 	</div>
