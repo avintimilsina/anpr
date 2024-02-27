@@ -31,6 +31,9 @@ const profileFormSchema = z.object({
 	name: z.string().min(1, {
 		message: "Name is required",
 	}),
+	phoneNumber: z.string().min(1, {
+		message: "Phone number is required",
+	}),
 	licenseNumber: z.string().min(1, {
 		message: "License number is required",
 	}),
@@ -49,6 +52,7 @@ const ProfileForm = () => {
 		defaultValues: {
 			email: currentUser?.email ?? "",
 			name: currentUser?.displayName ?? "",
+			phoneNumber: "",
 			licenseNumber: "",
 			licenseImage: "",
 		},
@@ -71,6 +75,9 @@ const ProfileForm = () => {
 			form.reset({
 				email: currentUser?.email ?? "",
 				name: currentUser?.displayName ?? "",
+				phoneNumber: currentUser?.phoneNumber ?? "",
+				// licenseNumber: currentUser?.metadata?.customClaims?.licenseNumber ?? "",
+				// licenseImage: currentUser?.metadata?.customClaims?.licenseImage ?? "",
 			});
 		}
 	}, [currentUser]);
@@ -99,6 +106,19 @@ const ProfileForm = () => {
 							<FormLabel>Name</FormLabel>
 							<FormControl>
 								<Input placeholder="Enter your name" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="phoneNumber"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Phone Number</FormLabel>
+							<FormControl>
+								<Input placeholder="XXXXXXXXXX" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
