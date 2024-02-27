@@ -1,5 +1,4 @@
 import ProfileForm from "@/components/forms/profile-form";
-import VehicleForm from "@/components/forms/vehicle-form";
 import { Separator } from "@/components/ui/separator";
 
 const Profile = () => (
@@ -12,7 +11,6 @@ const Profile = () => (
 		</div>
 		<Separator />
 		<ProfileForm />
-		<VehicleForm />
 	</div>
 );
 

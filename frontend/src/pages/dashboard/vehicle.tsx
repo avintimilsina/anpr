@@ -14,26 +14,7 @@ import { Button } from "@/components/ui/button";
 import VehicleForm from "@/components/forms/vehicle-form";
 import Modal from "@/components/shared/modal";
 import { type Vehicle } from "@/db/schema";
-import {
-	Card,
-	CardHeader,
-	CardTitle,
-	CardDescription,
-	CardContent,
-	CardFooter,
-} from "@/components/ui/card";
-import LicensePlatePreview from "@/components/cards/plate-preview";
-import {
-	AlertDialog,
-	AlertDialogTrigger,
-	AlertDialogContent,
-	AlertDialogHeader,
-	AlertDialogTitle,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogCancel,
-	AlertDialogAction,
-} from "@/components/ui/alert-dialog";
+import VehicleCard from "@/components/cards/vehicle-card";
 
 const VehiclePage = () => {
 	const [currentUser] = useAuthState(auth);
@@ -84,45 +65,7 @@ const VehiclePage = () => {
 			<Separator className="my-6" />
 			<div className="flex flex-col gap-4">
 				{values?.map((vehicle) => (
-					<Card key={vehicle.id}>
-						<CardHeader>
-							<CardTitle>{vehicle.id}</CardTitle>
-							<CardDescription>{vehicle.status}</CardDescription>
-						</CardHeader>
-						<CardContent>
-							<LicensePlatePreview
-								vehicleAgeIdentifier={vehicle.vehicleAgeIdentifier}
-								vehicleNumber={vehicle.vehicleNumber}
-								vehicleState={vehicle.vehicleState}
-								vehicleType={vehicle.vehicleType}
-							/>
-						</CardContent>
-						<CardFooter className="flex flex-row justify-end gap-4">
-							<Button>Update</Button>
-							<AlertDialog>
-								<AlertDialogTrigger asChild>
-									<Button variant="destructive">Delete</Button>
-								</AlertDialogTrigger>
-								<AlertDialogContent>
-									<AlertDialogHeader>
-										<AlertDialogTitle>
-											Are you sure you want to delete?
-										</AlertDialogTitle>
-										<AlertDialogDescription>
-											This action cannot be undone. This will permanently delete
-											your vehicle and you`ll lose your verification data.
-										</AlertDialogDescription>
-									</AlertDialogHeader>
-									<AlertDialogFooter>
-										<AlertDialogCancel>Cancel</AlertDialogCancel>
-										<AlertDialogAction asChild>
-											<Button variant="destructive">Delete</Button>
-										</AlertDialogAction>
-									</AlertDialogFooter>
-								</AlertDialogContent>
-							</AlertDialog>
-						</CardFooter>
-					</Card>
+					<VehicleCard vehicle={vehicle} key={vehicle.id} />
 				))}
 			</div>
 		</div>

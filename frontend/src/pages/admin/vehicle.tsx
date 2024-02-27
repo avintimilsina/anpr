@@ -77,7 +77,7 @@ const Vehicle = () => {
 	}
 
 	return (
-		<div className="m-4 flex-1 space-y-6 lg:max-w-5xl">
+		<div className="m-4 flex-1 space-y-6 lg:max-w-4xl">
 			<div className="flex flex-row items-center justify-between">
 				<div className="space-y-0.5">
 					<h2 className="text-2xl font-bold tracking-tight">Vehicles</h2>

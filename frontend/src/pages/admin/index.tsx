@@ -32,14 +32,36 @@ import {
 	TableBody,
 	TableCell,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { calculateParking } from "@/components/helpers";
+import { calculateParking, statusToColor } from "@/components/helpers";
 import { Input } from "@/components/ui/input";
 import { getParking } from "@/db/query";
 import { db } from "../../../firebase";
+import { Badge } from "@/components/ui/badge";
 
 dayjs.extend(relativeTime);
+
+const CELL_ACTIONS = [
+	{
+		label: "Exit",
+		variant: "destructive",
+		showOnStatus: ["PARKED"],
+		onClick: (vehicleId: string) => {
+			toast.promise(
+				updateDoc(doc(db, "parkings", vehicleId), {
+					exit: serverTimestamp(),
+					status: "COMPLETED",
+				} satisfies Partial<Parking>),
+				{
+					loading: "Updating...",
+					success: "Updated Successfully !",
+					error: "An Error Occured !",
+				}
+			);
+		},
+	},
+];
 
 const DashboardHome = () => {
 	const format = useFormatter();
@@ -67,11 +89,15 @@ const DashboardHome = () => {
 				</div>
 			</div>
 
+			<hr />
+
 			<div className="m-4 flex-1 space-y-6 lg:max-w-5xl">
 				<div className="flex flex-row items-center justify-between">
 					<div className="space-y-0.5">
-						<h2 className="text-2xl font-bold tracking-tight">Vehicles</h2>
-						<p className="text-muted-foreground">Manage your vehicles here.</p>
+						<h2 className="text-2xl font-bold tracking-tight">Parking</h2>
+						<p className="text-muted-foreground">
+							Every vehicle that`s parked or was parked.
+						</p>
 					</div>
 					<div className="flex flex-row gap-2">
 						<Input
@@ -148,7 +174,9 @@ const DashboardHome = () => {
 										<TableRow key={value.id}>
 											<TableCell className="font-medium">{value.id}</TableCell>
 											<TableCell className="font-medium">
-												{value.status}
+												<Badge variant={statusToColor(value.status)}>
+													{value.status}
+												</Badge>
 											</TableCell>
 											<TableCell>
 												{dayjs(
@@ -174,26 +202,18 @@ const DashboardHome = () => {
 												)}
 											</TableCell>
 											<TableCell>
-												<Button
-													className="w-full"
-													size="sm"
-													variant="destructive"
-													onClick={() => {
-														toast.promise(
-															updateDoc(doc(db, "parkings", value.id), {
-																exit: serverTimestamp(),
-																status: "COMPLETED",
-															} satisfies Partial<Parking>),
-															{
-																loading: "Updating...",
-																success: "Updated Successfully !",
-																error: "An Error Occured !",
-															}
-														);
-													}}
-												>
-													Exit
-												</Button>
+												{CELL_ACTIONS.filter((action) =>
+													action.showOnStatus.includes(value.status)
+												).map((action) => (
+													<Button
+														className="w-full"
+														size="sm"
+														variant={action.variant as ButtonProps["variant"]}
+														onClick={() => action.onClick(value.id)}
+													>
+														{action.label}
+													</Button>
+												))}
 											</TableCell>
 										</TableRow>
 									))}

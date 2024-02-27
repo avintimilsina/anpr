@@ -9,6 +9,13 @@ import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import {
+	type DocumentData,
+	type DocumentReference,
+	doc,
+	updateDoc,
+} from "firebase/firestore";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -19,15 +26,11 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { auth } from "../../../firebase";
+import { auth, db } from "../../../firebase";
 import Dropzone from "../shared/dropzone";
+import { type User } from "@/db/schema";
 
 const profileFormSchema = z.object({
-	email: z
-		.string({
-			required_error: "Please select an email to display.",
-		})
-		.email(),
 	name: z.string().min(1, {
 		message: "Name is required",
 	}),
@@ -44,16 +47,33 @@ const ProfileForm = () => {
 	const [currentUser] = useAuthState(auth);
 	const [updateProfile] = useUpdateProfile(auth);
 
+	const [user] = useDocumentData<User>(
+		doc(db, "users", currentUser?.uid ?? "not-found") as DocumentReference<
+			User,
+			DocumentData
+		>,
+		{
+			snapshotListenOptions: { includeMetadataChanges: true },
+		}
+	);
+
 	const form = useForm<ProfileFormValues>({
 		resolver: zodResolver(profileFormSchema),
 		defaultValues: {
-			email: currentUser?.email ?? "",
-			name: currentUser?.displayName ?? "",
-			licenseNumber: "",
-			licenseImage: "",
+			name: currentUser?.displayName ?? user?.displayName ?? "",
+			licenseNumber: user?.licenseNumber ?? "",
+			licenseImage: user?.licenseImage ?? "",
 		},
 		mode: "onChange",
 	});
+
+	useEffect(() => {
+		if (currentUser) {
+			form.setValue("name", currentUser?.displayName ?? "");
+			form.setValue("licenseNumber", user?.licenseNumber ?? "");
+			form.setValue("licenseImage", user?.licenseImage ?? "");
+		}
+	}, [currentUser, user]);
 
 	const onSubmit = (data: ProfileFormValues) => {
 		toast.promise(updateProfile({ displayName: data.name }), {
@@ -64,33 +84,31 @@ const ProfileForm = () => {
 			},
 			error: "Failed to update profile",
 		});
-	};
 
-	useEffect(() => {
-		if (currentUser) {
-			form.reset({
-				email: currentUser?.email ?? "",
-				name: currentUser?.displayName ?? "",
-			});
-		}
-	}, [currentUser]);
+		toast.promise(
+			updateDoc(doc(db, "users", currentUser?.uid ?? "not-found"), data),
+			{
+				loading: "Updating profile",
+				success: () => {
+					router.refresh();
+					return "Profile updated";
+				},
+				error: "Failed to update profile",
+			}
+		);
+	};
 
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-				<FormField
-					control={form.control}
-					name="email"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Email</FormLabel>
-							<FormControl>
-								<Input disabled {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+				<FormItem>
+					<FormLabel>Email</FormLabel>
+					<FormControl>
+						<Input disabled value={currentUser?.email ?? "Not Logged In"} />
+					</FormControl>
+					<FormMessage />
+				</FormItem>
+
 				<FormField
 					control={form.control}
 					name="name"
@@ -104,6 +122,19 @@ const ProfileForm = () => {
 						</FormItem>
 					)}
 				/>
+				{/* <FormField
+					control={form.control}
+					name="phoneNumber"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Phone</FormLabel>
+							<FormControl>
+								<Input placeholder="98XXXXXXXX" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/> */}
 				<FormField
 					control={form.control}
 					name="licenseNumber"
@@ -152,8 +183,12 @@ const ProfileForm = () => {
 					)}
 				/>
 
-
-				<Button type="submit">Update profile</Button>
+				<Button
+					disabled={form.formState.isSubmitting || !form.formState.isDirty}
+					type="submit"
+				>
+					Update profile
+				</Button>
 			</form>
 		</Form>
 	);

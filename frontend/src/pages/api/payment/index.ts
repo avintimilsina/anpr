@@ -21,6 +21,8 @@ export default async function handler(
 		req.headers["x-forwarded-host"] as string
 	}`;
 
+	console.log("Url", url);
+
 	switch (provider) {
 		case "KHALTI":
 			const resposne = await fetch(

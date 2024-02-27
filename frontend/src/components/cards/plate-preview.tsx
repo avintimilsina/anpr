@@ -25,7 +25,7 @@ const LicensePlatePreview = ({
 			<Image alt="Nepal Flag" src={flagsvg} height="100" width="100" />
 			<div className="flex flex-col items-center text-3xl">
 				<div>{vehicleState ?? "xxxxxx"} </div>
-				<div className="bg-wavy flex h-full flex-row items-center justify-center gap-4 text-black">
+				<div className="flex h-full flex-row items-center justify-center gap-4 text-black">
 					<div
 						className={`flex flex-row items-center gap-4 ${rajdhani.className} text-8xl`}
 					>

@@ -5,6 +5,7 @@ import {
 	query,
 	where,
 	type CollectionReference,
+	orderBy,
 } from "firebase/firestore";
 import { type Parking, type Vehicle } from "./schema";
 import { db } from "../../firebase";
@@ -26,11 +27,14 @@ export const getParking = (status?: Parking["status"]) => {
 	if (status) {
 		return query(
 			collection(db, "parkings"),
-			where("status", "==", status)
+			where("status", "==", status),
+			orderBy("status", "desc"),
+			orderBy("createdAt", "desc")
 		) as Query<Parking, DocumentData>;
 	}
-	return collection(db, "parkings") as CollectionReference<
-		Parking,
-		DocumentData
-	>;
+	return query(
+		collection(db, "parkings"),
+		orderBy("status", "desc"),
+		orderBy("createdAt", "desc")
+	) as Query<Parking, DocumentData>;
 };

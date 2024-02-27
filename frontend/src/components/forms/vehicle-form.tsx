@@ -7,7 +7,7 @@ import * as z from "zod";
 import { Check, ChevronsUpDown } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Button } from "@/components/ui/button";
 import {
@@ -62,7 +62,6 @@ const vehicleFormSchema = z.object({
 	vehicleNumber: z.coerce.number().min(0).max(9999),
 	vehicleState: z.enum(possibleStates),
 	vehicleBluebook: z.string().url(),
-	// driverLicense: z.string().url(),
 });
 
 type VehicleFormValues = z.infer<typeof vehicleFormSchema>;
@@ -79,18 +78,31 @@ const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
 	const form = useForm<VehicleFormValues>({
 		resolver: zodResolver(vehicleFormSchema),
 		defaultValues: {
-			vehicleType: undefined,
-			vehicleAgeIdentifier: "",
-			vehicleNumber: undefined,
-			vehicleState: undefined,
+			vehicleType: initialValues?.vehicleType ?? undefined,
+			vehicleAgeIdentifier: initialValues?.vehicleAgeIdentifier ?? "",
+			vehicleNumber: initialValues?.vehicleNumber ?? undefined,
+			vehicleState: initialValues?.vehicleState ?? undefined,
+			vehicleBluebook: initialValues?.vehicleBluebook ?? "",
 		},
 	});
 
 	const onSubmit = async (data: VehicleFormValues) => {
 		if (initialValues) {
-			toast.info("Form update goes here", {
-				id: "vehicle-form",
-			});
+			toast.promise(
+				updateDoc(doc(db, "vehicles", initialValues.id), {
+					...data,
+					status: "PENDING",
+				}),
+				{
+					loading: "Saving...",
+					success: () => {
+						form.reset();
+						onSuccess?.();
+						return "Saved successfully";
+					},
+					error: "Failed to save",
+				}
+			);
 		} else {
 			const vehicleId = `${data.vehicleState.toUpperCase()}-${
 				data.vehicleType
@@ -310,19 +322,6 @@ const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
 						</FormItem>
 					)}
 				/>
-				{/* <FormField
-					control={form.control}
-					name="driverLicense"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Driver License Image</FormLabel>
-							<FormControl>
-								<Dropzone onUpload={field.onChange} fileExtension="jpg" />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/> */}
 				<Button type="submit">Add New Vehicle</Button>
 			</form>
 		</Form>

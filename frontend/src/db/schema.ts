@@ -6,9 +6,16 @@ export interface Vehicle {
 	vehicleAgeIdentifier: string;
 	vehicleBluebook: string;
 	vehicleNumber: number;
-	vehicleState: string;
-	vehicleType: string;
 	status: "PENDING" | "VERIFIED" | "REJECTED";
+	vehicleState:
+		| "Koshi"
+		| "Madhesh"
+		| "Bagmati"
+		| "Gandaki"
+		| "Lumbini"
+		| "Karnali"
+		| "Sudurpaschim";
+	vehicleType: "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K";
 }
 
 export interface Parking {
@@ -24,9 +31,26 @@ export interface Parking {
 }
 
 export interface User {
-	id: string;
+	uid: string;
 	email: string;
-	password: string;
+	amount: number;
+	createdAt: Timestamp | FieldValue;
+	displayName: string;
+	emailVerified: boolean;
+	phoneNumber?: string | null;
+	photoURL?: string | null;
+	providerData?:
+		| {
+				displayName?: string | null;
+				email?: string | null;
+				phoneNumber?: string | null;
+				photoURL?: string | null;
+				providerId: string;
+				uid: string;
+		  }[]
+		| null;
+	licenseNumber?: string | null;
+	licenseImage?: string | null;
 }
 
 export interface Order {
