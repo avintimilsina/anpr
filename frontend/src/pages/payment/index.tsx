@@ -19,6 +19,7 @@ import {
 	orderBy,
 } from "firebase/firestore";
 import { useFormatter } from "next-intl";
+import { LuLoader2 } from "react-icons/lu";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -102,7 +103,7 @@ const SuccessPage = () => {
 	if (orderLoading || paymentLoading) {
 		return (
 			<div className="grid h-screen w-full place-items-center">
-				<h1>Loading...</h1>
+				<LuLoader2 className="animate-spin" />
 			</div>
 		);
 	}

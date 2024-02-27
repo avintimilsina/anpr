@@ -8,6 +8,7 @@ import {
 	where,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { LuLoader2 } from "react-icons/lu";
 import { Separator } from "@/components/ui/separator";
 import { auth, db } from "../../../firebase";
 import { Button } from "@/components/ui/button";
@@ -31,7 +32,7 @@ const VehiclePage = () => {
 	);
 
 	if (loading) {
-		return <p>Loading...</p>;
+		return <LuLoader2 className="animate-spin" />;
 	}
 
 	if (error) {

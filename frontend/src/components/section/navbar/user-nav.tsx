@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/router";
 import { doc } from "firebase/firestore";
 import { useFormatter } from "next-intl";
+import { LuLoader2 } from "react-icons/lu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,6 +38,10 @@ const UserNav = () => {
 		await router.push("/");
 	};
 
+	if (userLoading) {
+		return <LuLoader2 className="animate-spin" />
+	}
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -65,7 +70,7 @@ const UserNav = () => {
 					<div className="flex flex-col items-center justify-between gap-2">
 						<p className="text-lg font-medium leading-none">
 							Balance:{" "}
-							{format.number(Number(user?.amount) / 100 ?? 0, {
+							{format.number((Number(user?.amount) ?? 0) / 100, {
 								style: "currency",
 								currency: "NPR",
 							})}

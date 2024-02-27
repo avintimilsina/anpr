@@ -1,12 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { Check } from "lucide-react";
 
-import { toast } from "sonner";
+import { type User } from "firebase/auth";
+import { type GetStaticPropsContext } from "next";
+import { useRouter } from "next/navigation";
 import {
 	useAuthState,
 	useSendEmailVerification,
 } from "react-firebase-hooks/auth";
-import { useRouter } from "next/router";
-import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
 	Card,
 	CardContent,
@@ -15,13 +19,16 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import PageLoadingSpinner from "@/components/shared/page-loading-spinner";
 import { auth } from "../../../firebase";
 
-const VerifyEmail = () => {
-	const [sendEmailVerification, , error] = useSendEmailVerification(auth);
-	const [currentUser] = useAuthState(auth);
+interface VerifyEmailPageProps {
+	currentUser: User;
+}
+const VerifyEmailPage = ({ currentUser }: VerifyEmailPageProps) => {
+	const [sendEmailVerification] = useSendEmailVerification(auth);
 	const router = useRouter();
-
 	return (
 		<div className="flex h-screen flex-col items-center justify-center">
 			<Card className=" w-full max-w-md">
@@ -39,16 +46,7 @@ const VerifyEmail = () => {
 					<Button
 						className="w-full"
 						onClick={async () => {
-							if (currentUser?.emailVerified) {
-								toast.success("Email verified!", { id: "verifying-email" });
-								await router.push("/");
-							} else {
-								toast.error("Please verify your email", {
-									id: "verifying-email",
-								});
-
-								router.reload();
-							}
+							router.refresh();
 						}}
 					>
 						<Check className="mr-2 h-4 w-4" /> Already Verified?
@@ -59,19 +57,10 @@ const VerifyEmail = () => {
 					<Button
 						variant="link"
 						onClick={async () => {
-							toast.loading("Resending email...", { id: "verifying-email" });
-							const result = await sendEmailVerification();
-							if (result) {
-								toast.success("Verification email sent!", {
-									id: "verifying-email",
-								});
-							} else
-								toast.error(
-									error?.message ? error?.message : "An error occurred",
-									{
-										id: "verifying-email",
-									}
-								);
+							const emailVerification = await sendEmailVerification();
+							if (emailVerification) {
+								toast.success("Email Verification Sent!");
+							}
 						}}
 					>
 						Resend email{" "}
@@ -82,4 +71,40 @@ const VerifyEmail = () => {
 	);
 };
 
+const VerifyEmail = () => {
+	const router = useRouter();
+	const [user, loading, error] = useAuthState(auth);
+	if (loading) {
+		return <PageLoadingSpinner />;
+	}
+	if (error) {
+		return <PageLoadingSpinner />;
+	}
+
+	if (user?.emailVerified) {
+		router.push("/");
+		return <PageLoadingSpinner />;
+	}
+	if (!user) {
+		router.push("/auth/register");
+		return <PageLoadingSpinner />;
+	}
+	return (
+		<div>
+			<VerifyEmailPage currentUser={user} />
+		</div>
+	);
+};
+
+
 export default VerifyEmail;
+
+export async function getStaticProps(context: GetStaticPropsContext) {
+	return {
+		props: {
+			messages: (await import(`../../translations/${context.locale}.json`))
+				.default,
+		},
+	};
+}
+

@@ -34,9 +34,6 @@ const profileFormSchema = z.object({
 	name: z.string().min(1, {
 		message: "Name is required",
 	}),
-	phoneNumber: z.string().min(1, {
-		message: "Phone number is required",
-	}),
 	licenseNumber: z.string().min(1, {
 		message: "License number is required",
 	}),
@@ -138,19 +135,6 @@ const ProfileForm = () => {
 						</FormItem>
 					)}
 				/> */}
-				<FormField
-					control={form.control}
-					name="phoneNumber"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Phone Number</FormLabel>
-							<FormControl>
-								<Input placeholder="XXXXXXXXXX" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
 				<FormField
 					control={form.control}
 					name="licenseNumber"

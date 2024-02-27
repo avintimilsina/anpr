@@ -50,22 +50,22 @@ const SignUpForm = ({ onShowLogin, onSignUp }: SignUpFormProps) => {
 			password
 		);
 		if (currentUser) {
-			toast.success("Account created!", { id: "signing-up" });
 			onSignUp?.();
-			toast.loading("Loading", { id: "verifying-email" });
+			toast.loading("Loading", { id: "signing-up" });
 			const result = await sendEmailVerification();
 			if (result) {
-				toast.success("Verification email sent!", { id: "verifying-email" });
-			} else
+				toast.success("Verification email sent!", { id: "signing-up" });
+				await router.push("/auth/verify");
+			} else {
 				toast.error(error?.message ? error?.message : "An error occurred", {
-					id: "verifying-email",
+					id: "signing-up",
 				});
-
-			await router.push("/auth/verify");
-		} else
+			}
+		} else {
 			toast.error(error?.message ? error?.message : "An error occurred", {
 				id: "signing-up",
 			});
+		}
 	};
 	return (
 		<>
