@@ -5,10 +5,11 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { useSendEmailVerification } from "react-firebase-hooks/auth";
+import { useRouter } from "next/router";
 import { auth } from "../../../firebase";
 import { Button } from "../ui/button";
 import {
@@ -38,16 +39,33 @@ const SignUpForm = ({ onShowLogin, onSignUp }: SignUpFormProps) => {
 			password: "",
 		},
 	});
+	const [sendEmailVerification, , error] = useSendEmailVerification(auth);
+	const router = useRouter();
 
 	const signup = async ({ email, password }: z.infer<typeof formSchema>) => {
-		toast.promise(createUserWithEmailAndPassword(auth, email, password), {
-			loading: "Creating account...",
-			success: () => {
-				onSignUp?.();
-				return "Account created!";
-			},
-			error: (err: any) => err.message ?? "An error occured",
-		});
+		toast.loading("Loading", { id: "signing-up" });
+		const currentUser = await createUserWithEmailAndPassword(
+			auth,
+			email,
+			password
+		);
+		if (currentUser) {
+			toast.success("Account created!", { id: "signing-up" });
+			onSignUp?.();
+			toast.loading("Loading", { id: "verifying-email" });
+			const result = await sendEmailVerification();
+			if (result) {
+				toast.success("Verification email sent!", { id: "verifying-email" });
+			} else
+				toast.error(error?.message ? error?.message : "An error occurred", {
+					id: "verifying-email",
+				});
+
+			await router.push("/auth/verify");
+		} else
+			toast.error(error?.message ? error?.message : "An error occurred", {
+				id: "signing-up",
+			});
 	};
 	return (
 		<>
