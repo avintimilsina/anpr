@@ -34,7 +34,7 @@
     "**/*.tsx",
     "tailwind.config.js",
     ".next/types/**/*.ts"
-  ],
+, "src/db/action.ts"  ],
   "exclude": [
     "node_modules"
   ]

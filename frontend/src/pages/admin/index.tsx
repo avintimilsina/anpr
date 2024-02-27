@@ -12,7 +12,6 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useFormatter } from "next-intl";
 import { toast } from "sonner";
-import Dropzone from "@/components/shared/dropzone";
 import ParkingForm from "@/components/forms/parking-form";
 import { type Parking } from "@/db/schema";
 import {
@@ -39,6 +38,7 @@ import { Input } from "@/components/ui/input";
 import { getParking } from "@/db/query";
 import { db } from "../../../firebase";
 import { Badge } from "@/components/ui/badge";
+import VideoForm from "@/components/forms/video-form";
 
 dayjs.extend(relativeTime);
 
@@ -81,11 +81,7 @@ const DashboardHome = () => {
 					<ParkingForm />
 				</div>
 				<div className="h-full flex-grow p-4">
-					<Dropzone
-						onUpload={(url) => console.log("Download URL", url)} // Pass the handler function
-						fileExtension="mp4" // Set the expected file extension
-						folder="videos"
-					/>
+					<VideoForm />
 				</div>
 			</div>
 

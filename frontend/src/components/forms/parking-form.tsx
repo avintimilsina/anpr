@@ -105,7 +105,6 @@ const ParkingForm = ({ initialValues, onSuccess }: ParkingFormProps) => {
 					entry: serverTimestamp(),
 					vehicleId,
 					createdAt: serverTimestamp(),
-					uid: currentUser?.uid,
 					status: "PARKED",
 				} satisfies Parking),
 				{

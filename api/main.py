@@ -64,7 +64,7 @@ def ping():
 def api():
     input_json = request.json
     videos = input_json['url']
-    
+
     global results_df
     results_df = pd.DataFrame(columns=['frame_number', 'track_id', 'car_bbox', 'car_bbox_score',
                                        'license_plate_bbox', 'license_plate_bbox_score',
@@ -124,7 +124,7 @@ def api():
     average_time_per_track = results_df.groupby('track_id')['frame_number'].mean()
     max_license_score_row['average_time'] = (max_license_score_row['track_id'].map(average_time_per_track))/30
 
-    return jsonify(max_license_score_row[['license_plate_number', 'license_text_score', 'track_id', 'average_time']].to_dict())
+    return jsonify(max_license_score_row[['license_plate_number', 'license_text_score', 'track_id', 'average_time']].transpose().to_dict())
 
 
 if __name__ == "__main__":
