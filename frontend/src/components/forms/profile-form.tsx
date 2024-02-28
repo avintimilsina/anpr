@@ -31,7 +31,7 @@ import Dropzone from "../shared/dropzone";
 import { type User } from "@/db/schema";
 
 const profileFormSchema = z.object({
-	name: z.string().min(1, {
+	displayName: z.string().min(1, {
 		message: "Name is required",
 	}),
 	licenseNumber: z.string().min(1, {
@@ -60,7 +60,7 @@ const ProfileForm = () => {
 	const form = useForm<ProfileFormValues>({
 		resolver: zodResolver(profileFormSchema),
 		defaultValues: {
-			name: currentUser?.displayName ?? user?.displayName ?? "",
+			displayName: currentUser?.displayName ?? user?.displayName ?? "",
 			licenseNumber: user?.licenseNumber ?? "",
 			licenseImage: user?.licenseImage ?? "",
 		},
@@ -69,14 +69,14 @@ const ProfileForm = () => {
 
 	useEffect(() => {
 		if (currentUser) {
-			form.setValue("name", currentUser?.displayName ?? "");
+			form.setValue("displayName", currentUser?.displayName ?? "");
 			form.setValue("licenseNumber", user?.licenseNumber ?? "");
 			form.setValue("licenseImage", user?.licenseImage ?? "");
 		}
 	}, [currentUser, user]);
 
 	const onSubmit = (data: ProfileFormValues) => {
-		toast.promise(updateProfile({ displayName: data.name }), {
+		toast.promise(updateProfile({ displayName: data.displayName }), {
 			loading: "Updating profile",
 			success: () => {
 				router.refresh();
@@ -111,7 +111,7 @@ const ProfileForm = () => {
 
 				<FormField
 					control={form.control}
-					name="name"
+					name="displayName"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Name</FormLabel>

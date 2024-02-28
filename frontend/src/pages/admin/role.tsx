@@ -2,6 +2,8 @@
 
 import {
 	collection,
+	doc,
+	setDoc,
 	type CollectionReference,
 	type DocumentData,
 } from "firebase/firestore";
@@ -9,6 +11,7 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { LuLoader2 } from "react-icons/lu";
+import { toast } from "sonner";
 import AdminTable from "@/components/shared/admin-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +24,7 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { User, type Admin } from "@/db/schema";
+import { type User, type Admin } from "@/db/schema";
 import { db } from "../../../firebase";
 
 import {
@@ -38,34 +41,11 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-const frameworks = [
-	{
-		value: "next.js",
-		label: "Next.js",
-	},
-	{
-		value: "sveltekit",
-		label: "SvelteKit",
-	},
-	{
-		value: "nuxt.js",
-		label: "Nuxt.js",
-	},
-	{
-		value: "remix",
-		label: "Remix",
-	},
-	{
-		value: "astro",
-		label: "Astro",
-	},
-];
-
 const RolePage = () => {
 	const [search, setSearch] = useState("");
 	const [open, setOpen] = useState(false);
 	const [value, setValue] = useState("");
-	const [users, usersLoading, usersError] = useCollectionData<User>(
+	const [users, usersLoading] = useCollectionData<User>(
 		collection(db, "users") as CollectionReference<User, DocumentData>,
 		{
 			snapshotListenOptions: { includeMetadataChanges: true },
@@ -125,9 +105,7 @@ const RolePage = () => {
 											aria-expanded={open}
 											className=" justify-between"
 										>
-											{value
-												? users?.find((user) => user.uid === value)?.displayName
-												: "Select new admin..."}
+											{value || "Select new admin..."}
 											<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 										</Button>
 									</PopoverTrigger>
@@ -162,7 +140,27 @@ const RolePage = () => {
 								</Popover>
 							</div>
 							<DialogFooter>
-								<Button type="submit">Save changes</Button>
+								<Button
+									type="button"
+									onClick={async () => {
+										toast.promise(
+											setDoc(doc(db, "admins", value), {
+												isActive: true,
+											} satisfies Admin),
+											{
+												loading: "Creating...",
+												success: () => {
+													setValue("");
+													setOpen(false);
+													return "Created Successfully !";
+												},
+												error: "An Error Occured !",
+											}
+										);
+									}}
+								>
+									Save changes
+								</Button>
 							</DialogFooter>
 						</DialogContent>
 					</Dialog>
