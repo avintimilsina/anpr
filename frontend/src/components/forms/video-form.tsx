@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
-import { LuCalendar } from "react-icons/lu";
+import { LuCalendar, LuLoader2 } from "react-icons/lu";
 import Dropzone from "../shared/dropzone";
 import { Button } from "../ui/button";
 import {
@@ -162,11 +162,18 @@ const VideoForm = () => {
 					/>
 
 					<Button
-						className="w-full"
 						disabled={form.formState.isSubmitting || !form.formState.isDirty}
 						type="submit"
+						className="flex flex-row items-center gap-2"
 					>
-						Upload Video
+						{form.formState.isSubmitting ? (
+							<>
+								<LuLoader2 className="mr-2 h-4 w-4 animate-spin" />
+								Process Video
+							</>
+						) : (
+							"Process Video"
+						)}
 					</Button>
 				</div>
 			</form>

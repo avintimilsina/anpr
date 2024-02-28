@@ -2,12 +2,7 @@
 
 import { useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import {
-	doc,
-	serverTimestamp,
-	updateDoc,
-	type Timestamp,
-} from "firebase/firestore";
+import { doc, serverTimestamp, updateDoc, type Timestamp } from "firebase/firestore";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useFormatter } from "next-intl";
@@ -82,10 +77,10 @@ const CELL_ACTIONS = [
 		label: "Pay & Exit",
 		variant: "secondary",
 		showOnStatus: ["PARKED", "PAYMENT_REQUIRED"],
-		onClick: ({ id }: Parking) => {
+		onClick: ({ id, exit }: Parking) => {
 			toast.promise(
 				updateDoc(doc(db, "parkings", id), {
-					exit: serverTimestamp(),
+					exit: exit ?? serverTimestamp(),
 					status: "COMPLETED",
 				} satisfies Partial<Parking>),
 				{
@@ -127,7 +122,7 @@ const DashboardHome = () => {
 					<div className="space-y-0.5">
 						<h2 className="text-2xl font-bold tracking-tight">Parking</h2>
 						<p className="text-muted-foreground">
-							Every vehicle that`s parked or was parked.
+							Every vehicle that&apos;s parked or was parked.
 						</p>
 					</div>
 					<div className="flex flex-row gap-2">
