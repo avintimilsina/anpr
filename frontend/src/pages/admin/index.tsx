@@ -58,7 +58,7 @@ const CELL_ACTIONS = [
 		label: "Exit",
 		variant: "destructive",
 		showOnStatus: ["PARKED"],
-		onClick: (vehicleId: string) => {
+		onClick: ({ vehicleId }: Parking) => {
 			toast.promise(
 				vehicleEntry({
 					vehicleAgeIdentifier: vehicleId.split("-")[2],
@@ -82,9 +82,9 @@ const CELL_ACTIONS = [
 		label: "Pay & Exit",
 		variant: "secondary",
 		showOnStatus: ["PARKED", "PAYMENT_REQUIRED"],
-		onClick: (vehicleId: string) => {
+		onClick: ({ id }: Parking) => {
 			toast.promise(
-				updateDoc(doc(db, "parkings", vehicleId), {
+				updateDoc(doc(db, "parkings", id), {
 					exit: serverTimestamp(),
 					status: "COMPLETED",
 				} satisfies Partial<Parking>),
@@ -240,7 +240,7 @@ const DashboardHome = () => {
 														className="w-full"
 														size="sm"
 														variant={action.variant as ButtonProps["variant"]}
-														onClick={() => action.onClick(value.vehicleId)}
+														onClick={() => action.onClick(value)}
 													>
 														{action.label}
 													</Button>
@@ -364,9 +364,7 @@ const DashboardHome = () => {
 																	variant={
 																		action.variant as ButtonProps["variant"]
 																	}
-																	onClick={() =>
-																		action.onClick(value.vehicleId)
-																	}
+																	onClick={() => action.onClick(value)}
 																>
 																	{action.label}
 																</Button>
