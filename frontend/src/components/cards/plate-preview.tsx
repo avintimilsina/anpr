@@ -18,7 +18,7 @@ const LicensePlatePreview = ({
 	vehicleState: string;
 	vehicleType: string;
 	vehicleAgeIdentifier: string;
-	vehicleNumber: number;
+	vehicleNumber: string;
 }) => (
 	<div className="bg-wavy flex w-full flex-col items-center rounded-3xl border-4 border-black  text-black">
 		<div className="flex flex-row gap-4">

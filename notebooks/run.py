@@ -7,7 +7,7 @@ from ultralytics import YOLO
 
 coco_model = YOLO('yolov8n.pt')
 np_model = YOLO('/mnt/D/Projects/anpr/model/runs/detect/train/weights/best.pt')
-videos = "/mnt/D/Projects/anpr/notebooks/inputs/embossed.mp4"
+videos = "/home/avin/Downloads/InputVideos/BAA0783.mp4"
 
 reader = easyocr.Reader(['en'], gpu=True)
 

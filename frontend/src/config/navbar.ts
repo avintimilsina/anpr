@@ -36,6 +36,12 @@ export const ADMIN_DASHBOARD_NAV_ITEMS_TOP: NavItem[] = [
 		icon: "employee",
 		key: "employee",
 	},
+	{
+		title: "Roles",
+		href: "/admin/role",
+		icon: "employee",
+		key: "employee",
+	},
 ];
 
 export const ADMIN_DASHBOARD_NAV_ITEMS_BOTTOM: NavItem[] = [

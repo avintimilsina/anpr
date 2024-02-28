@@ -64,31 +64,10 @@ const VideoForm = () => {
 				vehicleType: video.license_plate_number[0] as Vehicle["vehicleType"],
 				vehicleState: "Bagmati",
 				vehicleAgeIdentifier: `${video.license_plate_number[1]}${video.license_plate_number[2]}`,
-				vehicleNumber: Number(video.license_plate_number.slice(3)),
+				vehicleNumber: video.license_plate_number.slice(3),
 				time: dayjs(data.entryTime).add(video.average_time, "seconds").toDate(),
 			});
 		});
-
-		// toast.promise(
-		// 	fetch("http://127.0.0.1:9696/api/video", {
-		// 		method: "POST",
-		// 		headers: {
-		// 			"Content-Type": "application/json",
-		// 		},
-		// 		body: JSON.stringify({
-		// 			url: data.videoUrl,
-		// 		}),
-		// 	}),
-		// 	{
-		// 		loading: "Saving...",
-		// 		success: async (response) => {
-		// 			console.log("Response: ", response);
-		// 			console.log("Response Json:  ", await response.json());
-		// 			return "Saved successfully";
-		// 		},
-		// 		error: "Failed",
-		// 	}
-		// );
 	};
 	return (
 		<Form {...form}>

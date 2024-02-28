@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { doc, serverTimestamp, updateDoc, type Timestamp } from "firebase/firestore";
+import {
+	doc,
+	serverTimestamp,
+	updateDoc,
+	type Timestamp,
+} from "firebase/firestore";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useFormatter } from "next-intl";
@@ -57,7 +62,7 @@ const CELL_ACTIONS = [
 			toast.promise(
 				vehicleEntry({
 					vehicleAgeIdentifier: vehicleId.split("-")[2],
-					vehicleNumber: Number(vehicleId.split("-")[3]),
+					vehicleNumber: vehicleId.split("-")[3],
 					vehicleState: (vehicleId.split("-")[0][0] +
 						vehicleId
 							.split("-")[0]

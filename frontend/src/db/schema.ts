@@ -5,7 +5,7 @@ export interface Vehicle {
 	uid: string;
 	vehicleAgeIdentifier: string;
 	vehicleBluebook: string;
-	vehicleNumber: number;
+	vehicleNumber: string;
 	status: "PENDING" | "VERIFIED" | "REJECTED";
 	vehicleState:
 		| "Koshi"
@@ -68,4 +68,9 @@ export interface Payment {
 	status: "PENDING" | "COMPLETED" | "FAILED" | "INITIATED" | "REFUNDED";
 	totalAmount: number;
 	createdAt: Timestamp | FieldValue;
+}
+
+export interface Admin
+{
+	isActive: boolean;
 }

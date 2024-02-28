@@ -20,7 +20,7 @@ import { calculateParking } from "@/components/helpers";
 
 interface VehicleEntryProps {
 	vehicleAgeIdentifier: string;
-	vehicleNumber: number;
+	vehicleNumber: string;
 	vehicleState:
 		| "Koshi"
 		| "Madhesh"

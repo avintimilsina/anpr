@@ -59,7 +59,7 @@ const possibleStates = [
 const vehicleFormSchema = z.object({
 	vehicleType: z.enum(possibleTypes),
 	vehicleAgeIdentifier: z.string().min(2).max(2).toUpperCase(),
-	vehicleNumber: z.coerce.number().min(0).max(9999),
+	vehicleNumber: z.string().min(4).max(4),
 	vehicleState: z.enum(possibleStates),
 	vehicleBluebook: z.string().url(),
 });
@@ -80,7 +80,7 @@ const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
 		defaultValues: {
 			vehicleType: initialValues?.vehicleType ?? undefined,
 			vehicleAgeIdentifier: initialValues?.vehicleAgeIdentifier ?? "",
-			vehicleNumber: initialValues?.vehicleNumber ?? undefined,
+			vehicleNumber: initialValues?.vehicleNumber ?? "",
 			vehicleState: initialValues?.vehicleState ?? undefined,
 			vehicleBluebook: initialValues?.vehicleBluebook ?? "",
 		},
@@ -223,7 +223,7 @@ const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
 							<FormItem>
 								<FormLabel>Vehicle Number</FormLabel>
 								<FormControl>
-									<Input placeholder="0000-9999" {...field} maxLength={4} />
+									<Input placeholder="0000-9999" {...field} maxLength={4} pattern="[0-9]{4}"/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>

@@ -34,3 +34,15 @@ export const statusToColor = (status: string): BadgeProps["variant"] => {
 			return "default";
 	}
 };
+
+export const extractFirstCharacter = (sentence: string | null): string => {
+	if (!sentence?.length) {
+		return "";
+	}
+
+	return sentence
+		.split(" ")
+		.map((word) => word[0])
+		.join("")
+		.toUpperCase();
+};
