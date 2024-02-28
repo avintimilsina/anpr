@@ -80,7 +80,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 					timeZone="UTC"
 					messages={pageProps.messages}
 				>
-					<Navbar />
+					<Navbar className="border-b" />
 					<div className="flex h-screen overflow-hidden">
 						<DashboardLayout>
 							<main className="flex-1 overflow-y-auto overflow-x-hidden">
@@ -108,7 +108,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 					timeZone="UTC"
 					messages={pageProps.messages}
 				>
-					<Navbar />
+					<Navbar className="border-b" />
 					<div className="flex h-screen overflow-hidden">
 						<Sidebar>
 							<main className="flex-1 overflow-y-auto overflow-x-hidden pt-16">

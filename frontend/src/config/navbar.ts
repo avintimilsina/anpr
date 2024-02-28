@@ -14,12 +14,6 @@ export const NAVBAR: NavItem[] = [
 		icon: "menu",
 		key: "home",
 	},
-	{
-		title: "Admin",
-		href: "/admin",
-		icon: "user",
-		key: "admin",
-	},
 ];
 
 export const ADMIN_DASHBOARD_NAV_ITEMS_TOP: NavItem[] = [

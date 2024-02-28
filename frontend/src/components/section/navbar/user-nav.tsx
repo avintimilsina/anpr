@@ -5,11 +5,13 @@ import { useRouter } from "next/router";
 import { doc } from "firebase/firestore";
 import { useFormatter } from "next-intl";
 import { LuLoader2 } from "react-icons/lu";
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
+	DropdownMenuGroup,
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
@@ -39,7 +41,7 @@ const UserNav = () => {
 	};
 
 	if (userLoading) {
-		return <LuLoader2 className="animate-spin" />
+		return <LuLoader2 className="animate-spin" />;
 	}
 
 	return (
@@ -86,19 +88,12 @@ const UserNav = () => {
 					</div>
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-				{/* <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Profile
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Billing
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-          </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator /> */}
+				<DropdownMenuGroup>
+					<DropdownMenuItem asChild>
+						<Link href="/admin">Admin</Link>
+					</DropdownMenuItem>
+				</DropdownMenuGroup>
+				<DropdownMenuSeparator />
 				<DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

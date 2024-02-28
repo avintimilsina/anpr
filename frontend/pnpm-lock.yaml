@@ -71,6 +71,9 @@ dependencies:
   firebase-admin:
     specifier: ^12.0.0
     version: 12.0.0
+  geist:
+    specifier: ^1.2.2
+    version: 1.2.2(next@14.0.4)
   lucide-react:
     specifier: ^0.307.0
     version: 0.307.0(react@18.2.0)
@@ -3748,6 +3751,14 @@ packages:
       - supports-color
     dev: false
     optional: true
+
+  /geist@1.2.2(next@14.0.4):
+    resolution: {integrity: sha512-uRDrxhvdnPwWJmh+K5+/5LXSKwvJzaYCl9tDXgiBi4hj7hB4K7+n/WLcvJMFs5btvyn0r9OSwCd1s6CmqAsxEw==}
+    peerDependencies:
+      next: '>=13.2.0 <15'
+    dependencies:
+      next: 14.0.4(react-dom@18.2.0)(react@18.2.0)
+    dev: false
 
   /get-caller-file@2.0.5:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}

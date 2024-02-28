@@ -2,13 +2,20 @@
 const nextConfig = {
 	productionBrowserSourceMaps: true,
 	images: {
-		domains: ["firebasestorage.googleapis.com"],
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "firebasestorage.googleapis.com",
+				port: "",
+			},
+		],
 	},
 	i18n: {
 		locales: ["en", "np"],
 		defaultLocale: "en",
 	},
 	reactStrictMode: true,
+	transpilePackages: ["geist"],
 };
 
 module.exports = nextConfig;
