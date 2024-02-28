@@ -13,7 +13,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { useFormatter } from "next-intl";
 import { toast } from "sonner";
 import ParkingForm from "@/components/forms/parking-form";
-import { Vehicle, type Parking } from "@/db/schema";
+import { type Vehicle, type Parking } from "@/db/schema";
 import {
 	Select,
 	SelectContent,
@@ -40,6 +40,16 @@ import { db } from "../../../firebase";
 import { Badge } from "@/components/ui/badge";
 import VideoForm from "@/components/forms/video-form";
 import { vehicleEntry } from "@/db/action";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 dayjs.extend(relativeTime);
 
@@ -69,7 +79,7 @@ const CELL_ACTIONS = [
 		},
 	},
 	{
-		label: "Pay",
+		label: "Pay & Exit",
 		variant: "secondary",
 		showOnStatus: ["PARKED", "PAYMENT_REQUIRED"],
 		onClick: (vehicleId: string) => {
@@ -222,7 +232,7 @@ const DashboardHome = () => {
 													{ style: "currency", currency: "NPR" }
 												)}
 											</TableCell>
-											<TableCell className="flex flex-row gap-2">
+											<TableCell className="flex flex-row justify-end gap-2">
 												{CELL_ACTIONS.filter((action) =>
 													action.showOnStatus.includes(value.status)
 												).map((action) => (
@@ -235,6 +245,135 @@ const DashboardHome = () => {
 														{action.label}
 													</Button>
 												))}
+
+												<Dialog>
+													<DialogTrigger asChild>
+														<Button
+															className="flex-grow"
+															size="sm"
+															variant="default"
+														>
+															Bill
+														</Button>
+													</DialogTrigger>
+													<DialogContent className="sm:max-w-[425px]">
+														<DialogHeader>
+															<DialogTitle>
+																Bill{" "}
+																<Badge variant={statusToColor(value.status)}>
+																	{value.status}
+																</Badge>
+															</DialogTitle>
+															<DialogDescription>
+																{format.number(
+																	calculateParking(
+																		value.entry as Timestamp,
+																		value.exit as Timestamp
+																	),
+																	{ style: "currency", currency: "NPR" }
+																)}
+															</DialogDescription>
+														</DialogHeader>
+														<div className="grid gap-4 py-4">
+															<div className="grid grid-cols-4 items-center gap-4">
+																<Label htmlFor="name" className="text-right">
+																	Entry Time
+																</Label>
+																<Input
+																	readOnly
+																	id="entrytime"
+																	value={dayjs(
+																		(value.entry as Timestamp)?.toMillis()
+																	).format("YYYY-MM-DD HH:mm:ss")}
+																	className="col-span-3"
+																/>
+															</div>
+															<div className="grid grid-cols-4 items-center gap-4">
+																<Label htmlFor="name" className="text-right">
+																	Exit Time
+																</Label>
+																<Input
+																	readOnly
+																	id="exittime"
+																	value={
+																		value.exit
+																			? dayjs(
+																					(value.exit as Timestamp)?.toMillis()
+																				).format("YYYY-MM-DD HH:mm:ss")
+																			: "N/A"
+																	}
+																	className="col-span-3"
+																/>
+															</div>
+															<div className="grid grid-cols-4 items-center gap-4">
+																<Label htmlFor="name" className="text-right">
+																	Parking Duration
+																</Label>
+																<Input
+																	readOnly
+																	id="duration"
+																	value={`${
+																		value.exit
+																			? dayjs(
+																					(value.exit as Timestamp)?.toMillis()
+																				).diff(
+																					dayjs(
+																						(
+																							value.entry as Timestamp
+																						)?.toMillis()
+																					),
+																					"minutes"
+																				)
+																			: dayjs(Date.now()).diff(
+																					dayjs(
+																						(
+																							value.entry as Timestamp
+																						)?.toMillis()
+																					),
+																					"minutes"
+																				)
+																	} minutes`}
+																	className="col-span-3"
+																/>
+															</div>
+															<div className="grid grid-cols-4 items-center gap-4">
+																<Label htmlFor="name" className="text-right">
+																	Total Charge
+																</Label>
+																<Input
+																	readOnly
+																	id="charge"
+																	value={format.number(
+																		calculateParking(
+																			value.entry as Timestamp,
+																			value.exit as Timestamp
+																		),
+																		{ style: "currency", currency: "NPR" }
+																	)}
+																	className="col-span-3"
+																/>
+															</div>
+														</div>
+														<DialogFooter>
+															{CELL_ACTIONS.filter((action) =>
+																action.showOnStatus.includes(value.status)
+															).map((action) => (
+																<Button
+																	className="w-full"
+																	size="sm"
+																	variant={
+																		action.variant as ButtonProps["variant"]
+																	}
+																	onClick={() =>
+																		action.onClick(value.vehicleId)
+																	}
+																>
+																	{action.label}
+																</Button>
+															))}
+														</DialogFooter>
+													</DialogContent>
+												</Dialog>
 											</TableCell>
 										</TableRow>
 									))}
