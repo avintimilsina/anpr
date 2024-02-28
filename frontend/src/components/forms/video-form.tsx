@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import { LuCalendar } from "react-icons/lu";
-import { toast } from "sonner";
 import Dropzone from "../shared/dropzone";
 import { Button } from "../ui/button";
 import {
@@ -44,7 +42,7 @@ const VideoForm = () => {
 		resolver: zodResolver(videoFormSchema),
 		defaultValues: {
 			videoUrl: "",
-			entryTime: new Date(),
+			entryTime: undefined,
 		},
 		mode: "onChange",
 	});
@@ -59,15 +57,15 @@ const VideoForm = () => {
 			}),
 		});
 		const datam = await response.json();
-		const videoData = Object.values(datam);
 
-		// @ts-expect-error kjsdhfs
-		videoData.forEach(async (video: VideoData) => {
+		// @ts-expect-error Type error
+		Object.values(datam).forEach(async (video: VideoData) => {
 			await vehicleEntry({
 				vehicleType: video.license_plate_number[0] as Vehicle["vehicleType"],
 				vehicleState: "Bagmati",
 				vehicleAgeIdentifier: `${video.license_plate_number[1]}${video.license_plate_number[2]}`,
 				vehicleNumber: Number(video.license_plate_number.slice(3)),
+				time: dayjs(data.entryTime).add(video.average_time, "seconds").toDate(),
 			});
 		});
 
@@ -94,7 +92,7 @@ const VideoForm = () => {
 	};
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 				<FormField
 					control={form.control}
 					name="videoUrl"
@@ -118,7 +116,9 @@ const VideoForm = () => {
 						name="entryTime"
 						render={({ field }) => (
 							<FormItem className="flex flex-col items-start md:gap-2">
-								<FormLabel className="whitespace-nowrap">Entry Time</FormLabel>
+								<FormLabel className="whitespace-nowrap">
+									Video Start Time
+								</FormLabel>
 								<Popover>
 									<PopoverTrigger asChild>
 										<FormControl>
@@ -132,7 +132,7 @@ const VideoForm = () => {
 												{field.value ? (
 													dayjs(field.value).format("MMMM D, YYYY h:mm:ss A")
 												) : (
-													<span>Picjpgk a date</span>
+													<span>Pick Video Start Time</span>
 												)}
 												<LuCalendar className="ml-auto h-4 w-4 opacity-50" />
 											</Button>
@@ -144,7 +144,7 @@ const VideoForm = () => {
 											selected={field.value}
 											onSelect={field.onChange}
 											disabled={(date) =>
-												date < new Date(Date.now() - 86400000)
+												date > new Date(Date.now() - 86400000)
 											}
 											initialFocus
 										/>
@@ -162,6 +162,7 @@ const VideoForm = () => {
 					/>
 
 					<Button
+						className="w-full"
 						disabled={form.formState.isSubmitting || !form.formState.isDirty}
 						type="submit"
 					>

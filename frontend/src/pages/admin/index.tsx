@@ -13,7 +13,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { useFormatter } from "next-intl";
 import { toast } from "sonner";
 import ParkingForm from "@/components/forms/parking-form";
-import { type Parking } from "@/db/schema";
+import { Vehicle, type Parking } from "@/db/schema";
 import {
 	Select,
 	SelectContent,
@@ -39,6 +39,7 @@ import { getParking } from "@/db/query";
 import { db } from "../../../firebase";
 import { Badge } from "@/components/ui/badge";
 import VideoForm from "@/components/forms/video-form";
+import { vehicleEntry } from "@/db/action";
 
 dayjs.extend(relativeTime);
 
@@ -47,6 +48,30 @@ const CELL_ACTIONS = [
 		label: "Exit",
 		variant: "destructive",
 		showOnStatus: ["PARKED"],
+		onClick: (vehicleId: string) => {
+			toast.promise(
+				vehicleEntry({
+					vehicleAgeIdentifier: vehicleId.split("-")[2],
+					vehicleNumber: Number(vehicleId.split("-")[3]),
+					vehicleState: (vehicleId.split("-")[0][0] +
+						vehicleId
+							.split("-")[0]
+							.slice(1)
+							.toLowerCase()) as Vehicle["vehicleState"],
+					vehicleType: vehicleId.split("-")[1] as Vehicle["vehicleType"],
+				}),
+				{
+					loading: "Updating...",
+					success: "Updated Successfully !",
+					error: "An Error Occured !",
+				}
+			);
+		},
+	},
+	{
+		label: "Pay",
+		variant: "secondary",
+		showOnStatus: ["PARKED", "PAYMENT_REQUIRED"],
 		onClick: (vehicleId: string) => {
 			toast.promise(
 				updateDoc(doc(db, "parkings", vehicleId), {
@@ -197,7 +222,7 @@ const DashboardHome = () => {
 													{ style: "currency", currency: "NPR" }
 												)}
 											</TableCell>
-											<TableCell>
+											<TableCell className="flex flex-row gap-2">
 												{CELL_ACTIONS.filter((action) =>
 													action.showOnStatus.includes(value.status)
 												).map((action) => (
@@ -205,7 +230,7 @@ const DashboardHome = () => {
 														className="w-full"
 														size="sm"
 														variant={action.variant as ButtonProps["variant"]}
-														onClick={() => action.onClick(value.id)}
+														onClick={() => action.onClick(value.vehicleId)}
 													>
 														{action.label}
 													</Button>

@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { toast } from "sonner";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,9 +26,8 @@ import {
 } from "../ui/command";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
-import { auth, db } from "../../../firebase";
-import { type Parking } from "@/db/schema";
-import { generateId } from "@/lib/nanoid";
+import { auth } from "../../../firebase";
+import { vehicleEntry } from "@/db/action";
 
 const possibleTypes = [
 	"A",
@@ -94,19 +92,13 @@ const ParkingForm = ({ initialValues, onSuccess }: ParkingFormProps) => {
 				id: "parking-form",
 			});
 		} else {
-			const parkingId = generateId("PARKING");
-			const vehicleId = `${data.vehicleState.toUpperCase()}-${
-				data.vehicleType
-			}-${data.vehicleAgeIdentifier}-${data.vehicleNumber}`;
-
 			toast.promise(
-				setDoc(doc(db, "parkings", parkingId), {
-					id: parkingId,
-					entry: serverTimestamp(),
-					vehicleId,
-					createdAt: serverTimestamp(),
-					status: "PARKED",
-				} satisfies Parking),
+				vehicleEntry({
+					vehicleType: data.vehicleType,
+					vehicleState: data.vehicleState,
+					vehicleAgeIdentifier: data.vehicleAgeIdentifier,
+					vehicleNumber: data.vehicleNumber,
+				}),
 				{
 					loading: "Saving...",
 					success: () => {

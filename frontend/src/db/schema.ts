@@ -20,13 +20,13 @@ export interface Vehicle {
 
 export interface Parking {
 	id: string;
-	entry: Timestamp | FieldValue;
-	exit?: Timestamp | FieldValue | null;
-	status: "BOOKED" | "PARKED" | "COMPLETED" | "CANCELLED";
+	entry: Date | Timestamp | FieldValue;
+	exit?: Date | Timestamp | FieldValue | null;
+	status: "BOOKED" | "PARKED" | "COMPLETED" | "PAYMENT_REQUIRED" | "CANCELLED";
 	vehicleId: string;
 	entryVideo?: string | null;
 	exitVideo?: string | null;
-	createdAt: Timestamp | FieldValue;
+	createdAt: Date | Timestamp | FieldValue;
 }
 
 export interface User {

@@ -38,3 +38,10 @@ export const getParking = (status?: Parking["status"]) => {
 		orderBy("createdAt", "desc")
 	) as Query<Parking, DocumentData>;
 };
+
+export const getParkingByVehicle = (vehicleId: string) =>
+	query(
+		collection(db, "parkings"),
+		where("status", "==", "PARKED"),
+		where("vehicleId", "==", vehicleId)
+	) as Query<Parking, DocumentData>;
