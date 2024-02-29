@@ -12,6 +12,7 @@ import {
 	increment,
 	runTransaction,
 } from "firebase/firestore";
+import { toast } from "sonner";
 import { db } from "../../firebase";
 import { type Vehicle, type Parking } from "./schema";
 import { generateId } from "@/lib/nanoid";
@@ -55,7 +56,7 @@ export const vehicleEntry = async ({
 		} satisfies Parking);
 	} else {
 		await updateDoc(doc(db, "parkings", querySnapshot.docs[0].id), {
-			exit: serverTimestamp(),
+			exit: time ?? serverTimestamp(),
 			status: "PAYMENT_REQUIRED",
 		} satisfies Partial<Parking>);
 
@@ -90,3 +91,48 @@ export const vehicleEntry = async ({
 		}
 	}
 };
+
+export const CELL_ACTIONS = [
+	{
+		label: "Exit",
+		variant: "destructive",
+		showOnStatus: ["PARKED"],
+		onClick: ({ vehicleId }: Parking) => {
+			toast.promise(
+				vehicleEntry({
+					vehicleAgeIdentifier: vehicleId.split("-")[2],
+					vehicleNumber: vehicleId.split("-")[3],
+					vehicleState: (vehicleId.split("-")[0][0] +
+						vehicleId
+							.split("-")[0]
+							.slice(1)
+							.toLowerCase()) as Vehicle["vehicleState"],
+					vehicleType: vehicleId.split("-")[1] as Vehicle["vehicleType"],
+				}),
+				{
+					loading: "Updating...",
+					success: "Updated Successfully !",
+					error: "An Error Occured !",
+				}
+			);
+		},
+	},
+	{
+		label: "Pay & Exit",
+		variant: "secondary",
+		showOnStatus: ["PARKED", "PAYMENT_REQUIRED"],
+		onClick: ({ id, exit }: Parking) => {
+			toast.promise(
+				updateDoc(doc(db, "parkings", id), {
+					exit: exit ?? serverTimestamp(),
+					status: "COMPLETED",
+				} satisfies Partial<Parking>),
+				{
+					loading: "Updating...",
+					success: "Updated Successfully !",
+					error: "An Error Occured !",
+				}
+			);
+		},
+	},
+];

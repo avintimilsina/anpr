@@ -72,7 +72,7 @@ const UserNav = () => {
 					<div className="flex flex-col items-center justify-between gap-2">
 						<p className="text-lg font-medium leading-none">
 							Balance:{" "}
-							{format.number((Number(user?.amount) ?? 0) / 100, {
+							{format.number((Number(user?.amount ?? 0) ?? 0) / 100, {
 								style: "currency",
 								currency: "NPR",
 							})}

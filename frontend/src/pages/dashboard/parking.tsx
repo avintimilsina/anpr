@@ -42,6 +42,7 @@ import { calculateParking, statusToColor } from "@/components/helpers";
 import { Input } from "@/components/ui/input";
 import { auth, db } from "../../../firebase";
 import { Badge } from "@/components/ui/badge";
+import BillModal from "@/components/modals/bill-modal";
 
 const CELL_ACTIONS = [
 	{
@@ -88,8 +89,6 @@ const DashboardHome = () => {
 			snapshotListenOptions: { includeMetadataChanges: true },
 		}
 	);
-
-	console.log("Error", error);
 
 	return (
 		<div className="m-4 flex-1 space-y-6 lg:max-w-5xl">
@@ -214,6 +213,7 @@ const DashboardHome = () => {
 													{action.label}
 												</Button>
 											))}
+											<BillModal parking={value} />
 										</TableCell>
 									</TableRow>
 								))}
