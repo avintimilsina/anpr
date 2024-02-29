@@ -6,7 +6,7 @@ import { SOCIALS } from "@/config/marketing";
 import { buttonVariants } from "../ui/button";
 
 const Footer = () => (
-	<footer className="container py-16">
+	<footer className="container pb-16">
 		<div className="flex flex-row justify-between py-8">
 			<Logo />
 			<div className="flex flex-row gap-4">
@@ -21,9 +21,9 @@ const Footer = () => (
 				))}
 			</div>
 		</div>
-		<div className="flex flex-row items-center justify-between border p-8">
+		<div className="flex flex-row justify-between border p-8">
 			<p>Copyright &copy; {new Date().getFullYear()} ANPR</p>
-			<div className="flex flex-row  gap-4">
+			<div className="items flex flex-row gap-4">
 				{SOCIALS.map(({ href, icon }) => {
 					const Icon = icon;
 					return (

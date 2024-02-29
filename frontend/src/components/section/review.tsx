@@ -13,7 +13,7 @@ import {
 } from "../ui/carousel";
 
 const ReviewSection = () => (
-	<section className="mx-auto my-24 flex max-w-5xl flex-row gap-16 border p-12">
+	<section className="mx-auto flex max-w-5xl flex-row gap-16 border p-12">
 		<div className="flex w-3/5 flex-col gap-6 px-4 py-8">
 			<h2 className="text-2xl font-bold md:text-5xl">People Love Us</h2>
 			<Carousel

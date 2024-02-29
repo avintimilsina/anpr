@@ -16,9 +16,9 @@ const Step = ({ label, text }: StepProps) => {
 		<div className="grid h-[500px] place-items-center">
 			<div
 				className={cn(
-					"flex min-h-[400px] w-[300px] flex-col justify-center gap-4 border p-4 py-8 text-2xl font-semibold transition-all ease-out",
+					"flex min-h-[400px] w-[250px] flex-col justify-center gap-4 border p-4 py-8 text-2xl font-semibold transition-all ease-out",
 					isHovering &&
-						"hover:w-[400px] hover:text-3xl hover:shadow-[4px_4px_0_rgb(0,0,0)] hover:dark:shadow-[4px_4px_0_rgb(255,255,255)]"
+						"hover:w-[350px] hover:text-3xl hover:shadow-[4px_4px_0_rgb(0,0,0)] hover:dark:shadow-[4px_4px_0_rgb(255,255,255)]"
 				)}
 				onMouseOver={() => setIsHovering(true)}
 				onMouseLeave={() => setIsHovering(false)}

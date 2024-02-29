@@ -19,11 +19,11 @@ const CarouselSection = () => {
 				opts={{
 					align: "start",
 				}}
-				className="my-24 max-h-96 w-full"
+				className="max-h-96 w-full"
 			>
 				<CarouselContent>
-					<CarouselItem className="md:basis-2/5 lg:basis-1/2  ">
-						<div className="h-full  p-1">
+					<CarouselItem className="md:basis-2/5 lg:basis-1/2">
+						<div className="h-full p-1">
 							<Card className="bg-background h-full border-0 shadow-none">
 								<CardContent className="flex h-full max-w-xl flex-col items-start justify-center gap-6 p-16">
 									<h2 className="text-3xl font-semibold md:text-6xl">

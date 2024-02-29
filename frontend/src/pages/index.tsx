@@ -15,9 +15,9 @@ import ReviewSection from "@/components/section/review";
 import Footer from "@/components/section/footer";
 
 const Home = () => (
-	<>
+	<main className="flex flex-col gap-32">
 		<Navbar />
-		<section className="container my-16 mt-[3.5rem] flex flex-col gap-3 p-6 md:gap-6 md:px-16 md:py-8">
+		<section className="container mt-[4rem] flex flex-col gap-3 p-6 md:gap-6">
 			<h1 className="mx-auto max-w-5xl text-center text-3xl font-semibold md:text-7xl">
 				Do you need some space for parking your Vehicle?
 			</h1>
@@ -46,7 +46,7 @@ const Home = () => (
 				</div>
 			</div>
 		</section>
-		<section className="container my-16 flex max-w-3xl flex-col items-center gap-3 text-center">
+		<section className="container flex max-w-3xl flex-col items-center gap-3 text-center">
 			<h2 className="text-3xl font-semibold md:text-6xl">
 				We Make It Deference
 			</h2>
@@ -84,9 +84,9 @@ const Home = () => (
 			</div>
 		</section>
 		<ReviewSection />
-		<section className="bg-secondary mt-24 border-y">
-			<div className="container mx-auto flex max-w-5xl flex-row gap-16 py-12">
-				<div className="-8 flex w-2/5 flex-col gap-6">
+		<section className="bg-secondary -mb-16 border-y dark:text-black">
+			<div className="container mx-auto flex max-w-5xl flex-row gap-16 px-0 py-12">
+				<div className="flex w-2/5 flex-col justify-center gap-6">
 					<h2 className="text-2xl font-bold md:text-5xl">People Love Us</h2>
 					<p>Parking`s Even Easier With the App. Download Now!</p>
 					<div className="relative mx-auto w-full max-w-xs lg:max-w-sm">
@@ -110,7 +110,7 @@ const Home = () => (
 			</div>
 		</section>
 		<Footer />
-	</>
+	</main>
 );
 
 export default Home;
