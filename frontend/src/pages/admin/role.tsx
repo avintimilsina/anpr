@@ -40,6 +40,9 @@ import {
 	PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { extractFirstCharacter } from "@/components/helpers";
+import UserProfile from "@/components/shared/user-profile";
 
 const RolePage = () => {
 	const [search, setSearch] = useState("");
@@ -65,9 +68,6 @@ const RolePage = () => {
 	if (adminError) {
 		return <div>{adminError?.message}</div>;
 	}
-	console.log(users);
-	console.log(users?.find((user) => user.uid === value)?.displayName);
-	console.log(value);
 
 	return (
 		<div className="m-4 flex-1 space-y-6 lg:max-w-5xl">
@@ -100,12 +100,25 @@ const RolePage = () => {
 								<Popover open={open} onOpenChange={setOpen}>
 									<PopoverTrigger asChild>
 										<Button
+											size="lg"
 											variant="outline"
 											role="combobox"
 											aria-expanded={open}
-											className=" justify-between"
+											className="w-full justify-between"
 										>
-											{value || "Select new admin..."}
+											{value ? (
+												<UserProfile
+													displayName={
+														users?.find((u) => u.uid === value)?.displayName
+													}
+													photoURL={
+														users?.find((u) => u.uid === value)?.photoURL
+													}
+													email={users?.find((u) => u.uid === value)?.email}
+												/>
+											) : (
+												"Select new admin..."
+											)}
 											<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 										</Button>
 									</PopoverTrigger>
@@ -114,26 +127,49 @@ const RolePage = () => {
 											<CommandInput placeholder="Search users..." />
 											<CommandEmpty>No users found.</CommandEmpty>
 											<CommandGroup>
-												{users?.map((user) => (
-													<CommandItem
-														key={user.uid}
-														value={user.uid}
-														onSelect={(currentValue) => {
-															setValue(
-																currentValue === value ? "" : currentValue
-															);
-															setOpen(false);
-														}}
-													>
-														<Check
-															className={cn(
-																"mr-2 h-4 w-4",
-																value === user.uid ? "opacity-100" : "opacity-0"
+												{users
+													?.filter(
+														(user) =>
+															!snapshot?.docs
+																.map((document) => document.id)
+																.includes(user.uid)
+													)
+													?.map((user) => (
+														<CommandItem
+															key={user.uid}
+															value={user.uid}
+															onSelect={(currentValue) => {
+																setValue(
+																	currentValue === value ? "" : user.uid
+																);
+																setOpen(false);
+															}}
+														>
+															{value === user.uid ? (
+																<Check
+																	className={cn(
+																		"mr-2 h-4 w-4",
+																		value === user.uid
+																			? "opacity-100"
+																			: "opacity-0"
+																	)}
+																/>
+															) : (
+																<Avatar className="mr-2 h-4 w-4">
+																	<AvatarImage
+																		src={
+																			user.photoURL ??
+																			`https://api.dicebear.com/7.x/adventurer/svg?seed=${user.displayName}`
+																		}
+																	/>
+																	<AvatarFallback>
+																		{extractFirstCharacter(user.displayName)}
+																	</AvatarFallback>
+																</Avatar>
 															)}
-														/>
-														{user?.displayName}
-													</CommandItem>
-												))}
+															{user?.displayName ?? user?.email.split("@")[0]}
+														</CommandItem>
+													))}
 											</CommandGroup>
 										</Command>
 									</PopoverContent>

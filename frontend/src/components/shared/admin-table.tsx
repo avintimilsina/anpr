@@ -13,7 +13,6 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { LuLoader2 } from "react-icons/lu";
 import { type User } from "@/db/schema";
 import { db } from "../../../firebase";
-import { extractFirstCharacter } from "../helpers";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -24,7 +23,6 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
@@ -35,6 +33,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "../ui/table";
+import UserProfile from "./user-profile";
 
 const badgeEnum = {
 	active: "default",
@@ -98,26 +97,12 @@ const AdminTable = ({ admins, search }: TableContentProps) => {
 								return (
 									<TableRow key={user.uid}>
 										<TableCell key={user.uid}>
-											<div className="my-2 flex items-center space-x-4">
-												<Avatar>
-													<AvatarImage
-														src={
-															user.photoURL ??
-															`https://api.dicebear.com/7.x/adventurer/svg?seed=${user.displayName}`
-														}
-													/>
-													<AvatarFallback>
-														{extractFirstCharacter(user.displayName)}
-													</AvatarFallback>
-												</Avatar>
-												<div>
-													<p className="text-sm font-medium leading-none">
-														{user.displayName}
-													</p>
-												</div>
-											</div>
+											<UserProfile
+												displayName={user.displayName}
+												photoURL={user.photoURL}
+												email={user.email}
+											/>
 										</TableCell>
-										<TableCell className="whitespace-nowrap" key={user.uid} />
 										<TableCell className="whitespace-nowrap" key={user.uid}>
 											<Badge
 												variant={badgeEnum[isActive ? "active" : "revoked"]}
