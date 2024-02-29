@@ -7,6 +7,7 @@ import UserNav from "./user-nav";
 import { NAVBAR } from "@/config/navbar";
 import ThemeToggle from "@/components/layout/theme-toggle";
 import { cn } from "@/lib/utils";
+import Logo from "@/components/shared/logo";
 
 const Navbar = ({ className }: { className?: string }) => {
 	const [currentUser] = useAuthState(auth);
@@ -20,12 +21,7 @@ const Navbar = ({ className }: { className?: string }) => {
 		>
 			<nav className="container flex h-14 items-center justify-between">
 				<div className="flex gap-6 md:gap-10">
-					<Link className="hidden items-center space-x-2 md:flex" href="/">
-						<LuFish />
-						<span className="hidden font-mono font-bold sm:inline-block">
-							ANPR
-						</span>
-					</Link>
+					<Logo />
 					<button
 						className="flex items-center space-x-2 md:hidden"
 						type="button"

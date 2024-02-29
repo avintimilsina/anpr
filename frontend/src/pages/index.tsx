@@ -3,11 +3,16 @@
 import { type GetStaticPropsContext } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { LuChevronRight } from "react-icons/lu";
 import Navbar from "@/components/section/navbar";
 import { Input } from "@/components/ui/input";
 import heroImage from "@/../public/assets/hero.svg";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Step from "@/components/cards/step";
+import CarouselSection from "@/components/section/carousel";
+import { STEPS } from "@/config/marketing";
+import ReviewSection from "@/components/section/review";
+import Footer from "@/components/section/footer";
 
 const Home = () => (
 	<>
@@ -53,16 +58,58 @@ const Home = () => (
 				<Button>HOW IT WORKS</Button>
 			</div>
 			<div className="my-8 flex flex-row items-center gap-4">
-				{[
-					{ label: 1, text: "Enter your zone number" },
-					{ label: 2, text: "Set Your Time" },
-					{ label: 3, text: "Select your Vehicle" },
-					{ label: 4, text: "Pay & Go To Your Spot Parking" },
-				].map((step) => (
+				{STEPS.map((step) => (
 					<Step key={step.label} label={step.label} text={step.text} />
 				))}
 			</div>
 		</section>
+		<CarouselSection />
+		<section className="mx-auto flex max-w-5xl flex-row gap-16 py-24">
+			<div className="w-2/5 overflow-hidden border border-black">
+				<Image alt="Hero" className="scale-[200%] " src={heroImage} />
+			</div>
+			<div className="flex w-3/5 flex-col gap-6 px-4 py-8">
+				<h2 className="text-2xl font-bold md:text-5xl">
+					Easily Ways for Parking From Your Phone
+				</h2>
+				<p>
+					We Make it simple & user friendly for you to take a spot for parking
+					with your vehicle!
+				</p>
+				<div>
+					<Link href="/" className={buttonVariants({ variant: "default" })}>
+						LEARN MORE
+					</Link>
+				</div>
+			</div>
+		</section>
+		<ReviewSection />
+		<section className="bg-secondary mt-24 border-y">
+			<div className="container mx-auto flex max-w-5xl flex-row gap-16 py-12">
+				<div className="-8 flex w-2/5 flex-col gap-6">
+					<h2 className="text-2xl font-bold md:text-5xl">People Love Us</h2>
+					<p>Parking`s Even Easier With the App. Download Now!</p>
+					<div className="relative mx-auto w-full max-w-xs lg:max-w-sm">
+						<Input
+							className="py-6"
+							placeholder="Input your email for subscriber"
+							type="email"
+						/>
+						<Button
+							className="absolute right-1 top-0 my-1"
+							variant="default"
+							size="icon"
+						>
+							<LuChevronRight className="text-2xl" />
+						</Button>
+					</div>
+				</div>
+				<div className="w-3/5 overflow-hidden border border-black">
+					<Image alt="Hero" className="scale-[200%] " src={heroImage} />
+				</div>
+			</div>
+		</section>
+		<Footer />
 	</>
 );
 
