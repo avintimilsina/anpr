@@ -1,19 +1,18 @@
 /* eslint-disable no-nested-ternary */
 
-import { useState } from "react";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import {
-	doc,
-	serverTimestamp,
-	updateDoc,
-	type Timestamp,
-} from "firebase/firestore";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { type Timestamp } from "firebase/firestore";
 import { useFormatter } from "next-intl";
-import { toast } from "sonner";
+import { useState } from "react";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import ParkingForm from "@/components/forms/parking-form";
-import { type Vehicle, type Parking } from "@/db/schema";
+import VideoForm from "@/components/forms/video-form";
+import { calculateParking, statusToColor } from "@/components/helpers";
+import BillModal from "@/components/modals/bill-modal";
+import { Badge } from "@/components/ui/badge";
+import { Button, type ButtonProps } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
@@ -23,24 +22,18 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
 	Table,
-	TableHeader,
-	TableRow,
-	TableHead,
 	TableBody,
 	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
 } from "@/components/ui/table";
-import { Button, type ButtonProps } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { calculateParking, statusToColor } from "@/components/helpers";
-import { Input } from "@/components/ui/input";
 import { getParking } from "@/db/query";
-import { db } from "../../../firebase";
-import { Badge } from "@/components/ui/badge";
-import VideoForm from "@/components/forms/video-form";
-import { CELL_ACTIONS, vehicleEntry } from "@/db/action";
-import BillModal from "@/components/modals/bill-modal";
+import { type Parking } from "@/db/schema";
+import { CELL_ACTIONS } from "@/db/action";
 
 dayjs.extend(relativeTime);
 
@@ -56,7 +49,7 @@ const DashboardHome = () => {
 	);
 
 	return (
-		<div className="flex flex-col gap-4 lg:max-w-5xl">
+		<div className="flex flex-col gap-4 lg:max-w-6xl">
 			<div className="flex flex-col items-end gap-2 md:flex-row">
 				<div className="flex-grow p-4">
 					<ParkingForm />
@@ -68,7 +61,7 @@ const DashboardHome = () => {
 
 			<hr />
 
-			<div className="m-4 flex-1 space-y-6 lg:max-w-5xl">
+			<div className="m-4 flex-1 space-y-6 lg:max-w-6xl">
 				<div className="flex flex-row items-center justify-between">
 					<div className="space-y-0.5">
 						<h2 className="text-2xl font-bold tracking-tight">Parking</h2>
