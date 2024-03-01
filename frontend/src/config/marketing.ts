@@ -1,9 +1,10 @@
 import { LuFacebook, LuInstagram, LuLinkedin, LuTwitter } from "react-icons/lu";
+import { type ProcessImage } from "@/components/cards/step";
 
 export const SOCIALS = [
 	{
 		label: "Twitter",
-		href: "https://twitter.com/withanpr",
+		href: "https://twitter.com/",
 		icon: LuTwitter,
 	},
 	{
@@ -13,91 +14,91 @@ export const SOCIALS = [
 	},
 	{
 		label: "LinkedIn",
-		href: "https://linkedin.com/withanpr",
+		href: "https://linkedin.com/",
 		icon: LuLinkedin,
 	},
 	{
 		label: "Instagram",
-		href: "https://instagram.com/withanpr",
+		href: "https://instagram.com/",
 		icon: LuInstagram,
 	},
 ];
 
-export const STEPS = [
-	{ label: 1, text: "Enter your zone number" },
-	{ label: 2, text: "Set Your Time" },
-	{ label: 3, text: "Select your Vehicle" },
-	{ label: 4, text: "Pay & Go To Your Spot Parking" },
+export const STEPS: { label: number; text: string; image: ProcessImage }[] = [
+	{ label: 1, text: "Register with ParkSathi", image: "register" },
+	{ label: 2, text: "Setup vehicle details", image: "vehicle" },
+	{ label: 3, text: "Park in any of our parking spots", image: "parking" },
+	{ label: 4, text: "Get bills by minute in our app", image: "payment" },
 ];
 
 export const REVIEWS = [
 	{
-		rating: 3,
+		rating: 5,
 		content:
-			"Having this app means I get to choose not only the price and see the savings but the location and what fits my needs the best. It's the most useful app I have.",
-		author: "Mira Diaz",
+			"This app is a game-changer! Effortlessly find and secure parking spots. User-friendly interface and advance reservations make city parking stress-free. Kudos to the developers for creating such a convenient and efficient solution!",
+		author: "Abin Timilsina",
 	},
 	{
 		rating: 5,
 		content:
-			"Having this app means I get to choose not only the price and see the savings but the location and what fits my needs the best. It's the most useful app I have.",
-		author: "Mira Diaz",
+			"Automatic parking has transformed my city life. Real-time availability and automated processes save time. A must-have for urbanites seeking convenience and efficiency.",
+		author: "Kritika Sharma",
+	},
+	{
+		rating: 5,
+		content:
+			"Seamless from start to finish. Precision in navigation and parking is impressive. Enjoyable and stress-free, with the added bonus of extending parking with a simple tap. Delighted user, can't imagine going back to traditional hassles!",
+		author: "Ruza Kansakar",
 	},
 ];
 
 export const CITIES = [
 	{
-		image:
-			"https://images.unsplash.com/photo-1622836270623-0a8072ed6eec?q=80&w=1899&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-		name: "City Center Garage",
-		address: "SSS Cedar Lane, Anytown, USA",
-		ambience: "QUIET",
-		distance: 1600,
-		rating: 4.5,
+		image: "/assets/places/chhayacenter.jpg",
+		name: "Chhaya Center Parking",
+		address: "Thamel, Kathmandu",
+		ambience: "BUSY",
+		distance: 1200,
+		rating: 4.2,
 	},
 	{
-		image:
-			"https://images.unsplash.com/photo-1622836270623-0a8072ed6eec?q=80&w=1899&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-		name: "City Left Garage",
-		address: "SSS Cedar Lane, Anytown, USA",
-		ambience: "QUIET",
-		distance: 1600,
-		rating: 4.5,
+		image: "/assets/places/dharahara.jpg",
+		name: "Dharahara Parking",
+		address: "Sundhara, Kathmandu",
+		ambience: "NOISY",
+		distance: 4200,
+		rating: 3.5,
 	},
 	{
-		image:
-			"https://images.unsplash.com/photo-1622836270623-0a8072ed6eec?q=80&w=1899&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-		name: "City Right Garage",
-		address: "SSS Cedar Lane, Anytown, USA",
+		image: "/assets/places/civilmall.jpg",
+		name: "Civil Mall Parking",
+		address: "Sundhara, Kathmandu",
 		ambience: "QUIET",
-		distance: 1600,
-		rating: 4.5,
+		distance: 3000,
+		rating: 4.1,
 	},
 	{
-		image:
-			"https://images.unsplash.com/photo-1622836270623-0a8072ed6eec?q=80&w=1899&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-		name: "City Top Right Garage",
-		address: "SSS Cedar Lane, Anytown, USA",
+		image: "/assets/places/bhatbhateni.jpeg",
+		name: "Bhatbhateni",
+		address: "Radhe Radhe, Bhaktapur",
 		ambience: "QUIET",
-		distance: 1600,
-		rating: 4.5,
+		distance: 6000,
+		rating: 4.9,
 	},
 	{
-		image:
-			"https://images.unsplash.com/photo-1622836270623-0a8072ed6eec?q=80&w=1899&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-		name: "City Top Left Garage",
-		address: "SSS Cedar Lane, Anytown, USA",
+		image: "/assets/places/skytower.jpg",
+		name: "Sky Tower Parking",
+		address: "Kamaladi, Kathmandu",
 		ambience: "QUIET",
-		distance: 1600,
-		rating: 4.5,
+		distance: 7200,
+		rating: 4.4,
 	},
 	{
-		image:
-			"https://images.unsplash.com/photo-1622836270623-0a8072ed6eec?q=80&w=1899&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-		name: "City Under Garage",
-		address: "SSS Cedar Lane, Anytown, USA",
+		image: "/assets/places/lakeside.jpeg",
+		name: "Lake View Parking",
+		address: "Lakeside, Pokhara",
 		ambience: "QUIET",
-		distance: 1600,
-		rating: 4.5,
+		distance: 5000,
+		rating: 4.8,
 	},
 ];

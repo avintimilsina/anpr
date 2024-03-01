@@ -220,7 +220,7 @@ const DashboardHome = () => {
 						</TableBody>
 					) : (
 						<TableRow>
-							<TableCell colSpan={6} className="h-24 text-center">
+							<TableCell colSpan={7} className="h-24 text-center">
 								{error
 									? `An Error Occured ! ${error?.name}-${error?.code}`
 									: "No results"}

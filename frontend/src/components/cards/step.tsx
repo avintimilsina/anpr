@@ -4,12 +4,21 @@ import { LuPlay } from "react-icons/lu";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 
+export type ProcessImage = keyof typeof images;
+
 interface StepProps {
 	label: number;
 	text: string;
+	image: ProcessImage;
 }
+const images = {
+	register: "bg-[url('/assets/register.svg')]",
+	vehicle: "bg-[url('/assets/vehicle.svg')]",
+	parking: "bg-[url('/assets/parking3.svg')]",
+	payment: "bg-[url('/assets/payment.svg')]",
+};
 
-const Step = ({ label, text }: StepProps) => {
+const Step = ({ label, text, image }: StepProps) => {
 	const [isHovering, setIsHovering] = useState(false);
 
 	return (
@@ -30,7 +39,7 @@ const Step = ({ label, text }: StepProps) => {
 				<div
 					className={cn(
 						"grid aspect-square w-[25%] place-items-center border transition-all duration-500 ease-out",
-						isHovering && "w-full bg-blue-200"
+						isHovering && `w-full ${images[image]}  bg-cover>`
 					)}
 				>
 					<div className={cn("p-4", isHovering && "border")}>

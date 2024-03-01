@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Image from "next/image";
-import heroImage from "@/../../public/assets/hero.svg";
+import envImage from "@/../../public/assets/environment.svg";
 import { LuStar } from "react-icons/lu";
 import { REVIEWS } from "@/config/marketing";
 import { Card, CardContent } from "../ui/card";
@@ -67,7 +67,7 @@ const ReviewSection = () => (
 			</Carousel>
 		</div>
 		<div className="w-2/5 overflow-hidden border border-black">
-			<Image alt="Hero" className="scale-[200%] " src={heroImage} />
+			<Image alt="Hero" className="scale-[300%] " src={envImage} />
 		</div>
 	</section>
 );

@@ -22,7 +22,7 @@ const Footer = () => (
 			</div>
 		</div>
 		<div className="flex flex-row justify-between border p-8">
-			<p>Copyright &copy; {new Date().getFullYear()} ANPR</p>
+			<p>Copyright &copy; {new Date().getFullYear()} ParkSathi</p>
 			<div className="items flex flex-row gap-4">
 				{SOCIALS.map(({ href, icon }) => {
 					const Icon = icon;

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { auth } from "../../../firebase";
 import NavBar from "@/components/section/navbar";
+import Logo from "@/components/shared/logo";
 
 const LoginPage = () => {
 	const [isShowingSignUp, setIsShowingSignUp] = useState<boolean>(false);
@@ -30,9 +31,7 @@ const LoginPage = () => {
 			<NavBar />
 			<div className="mt-[5%]">
 				<section className="mx-auto max-w-md">
-					<h1 className="mb-6 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-						anpr
-					</h1>
+					<Logo className="my-4" />
 					<Card>
 						<CardHeader>
 							<CardTitle>{isShowingSignUp ? "Sign Up" : "Sign In"}</CardTitle>

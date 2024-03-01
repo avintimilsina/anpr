@@ -34,7 +34,7 @@ export default async function handler(
 						website_url: url,
 						amount,
 						purchase_order_id: orderId ?? "order-id-not-found",
-						purchase_order_name: "ANPR Payment",
+						purchase_order_name: "ParkSathi Payment",
 						customer_info: {
 							name,
 							email,
@@ -48,7 +48,7 @@ export default async function handler(
 						],
 						product_details: [
 							{
-								identity: `Wallet-Load-ANPR-${amount}`,
+								identity: `Wallet-Load-ParkSathi-${amount}`,
 								name: `Wallet Load ${amount}`,
 								total_price: amount,
 								quantity: 1,
@@ -76,6 +76,8 @@ export default async function handler(
 			break;
 
 		case "ESEWA":
+			console.log("ESEWA", url);
+
 			res.status(200).json({
 				provider: "ESEWA",
 				amt: amount,

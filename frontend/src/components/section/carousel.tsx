@@ -27,18 +27,18 @@ const CarouselSection = () => {
 							<Card className="bg-background h-full border-0 shadow-none">
 								<CardContent className="flex h-full max-w-xl flex-col items-start justify-center gap-6 p-16">
 									<h2 className="text-3xl font-semibold md:text-6xl">
-										Parking by City
+										Parking by Location
 									</h2>
 									<p>
-										Parkirun is making parking easier in over 3,000 locations
-										across all major cities in North America.
+										ParkSathi is making parking easier in over 300 locations
+										across all major cities in Nepal.
 									</p>
 									<Input
 										placeholder="Search location parking/town name"
 										type="search"
 									/>
 									<div>
-										<Button size="lg">EXPLORE CITY</Button>
+										<Button size="lg">EXPLORE LOCATION</Button>
 									</div>
 								</CardContent>
 							</Card>
@@ -52,12 +52,12 @@ const CarouselSection = () => {
 							<div className="p-1">
 								<Card className=" shadow-[0px_0px_0px_rgb(0,0,0)] transition-all ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_rgb(0,0,0)] dark:shadow-[0px_0px_0px_rgb(255,255,255)] dark:hover:shadow-[3px_3px_0_rgb(255,255,255)]">
 									<CardContent className="relative flex aspect-square flex-col items-center justify-center p-6">
-										<div className="h-[300px] overflow-hidden object-contain">
+										<div className="h-[300px] overflow-hidden object-fill">
 											<Image
 												alt="hero"
-												objectFit="contain"
-												height={400}
-												width={400}
+												objectFit="fill"
+												height={300}
+												width={300}
 												src={city.image}
 											/>
 										</div>

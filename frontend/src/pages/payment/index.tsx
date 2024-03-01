@@ -95,7 +95,6 @@ const SuccessPage = () => {
 		return (
 			<div className="grid h-screen w-full place-items-center">
 				<h1>Please, do not close the window or shut down the computer.</h1>
-				<p>updatingPayment {updatingPayment.toString()}</p>
 			</div>
 		);
 	}
@@ -116,7 +115,7 @@ const SuccessPage = () => {
 						<div className="flex flex-row items-start">
 							<Badge>PAYMENT {payments?.[0].status}</Badge>
 						</div>
-						<h1 className="text-5xl font-bold">Thanks for ordering.</h1>
+						<h1 className="text-5xl font-bold">Thanks for the topup.</h1>
 						<h2 className="text-2xl">
 							Your topup of{" "}
 							<span className="font-bold">
@@ -125,12 +124,11 @@ const SuccessPage = () => {
 									currency: "NPR",
 								})}{" "}
 							</span>{" "}
-							was {payments?.[0].status.toLowerCase()}. You might recieve an
-							phone call to confirm you order.
+							was {payments?.[0].status.toLowerCase()}.
 						</h2>
 					</div>
 					<div className="flex flex-col items-start">
-						<p className="text-2xl font-semibold">Order Id</p>
+						<p className="text-2xl font-semibold">Payment Id</p>
 						<div>
 							<p>{order?.id}</p>
 						</div>

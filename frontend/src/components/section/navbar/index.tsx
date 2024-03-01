@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { LuFish } from "react-icons/lu";
+import ThemeToggle from "@/components/layout/theme-toggle";
+import Logo from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
+import { NAVBAR } from "@/config/navbar";
+import { cn } from "@/lib/utils";
 import { auth } from "../../../../firebase";
 import UserNav from "./user-nav";
-import { NAVBAR } from "@/config/navbar";
-import ThemeToggle from "@/components/layout/theme-toggle";
-import { cn } from "@/lib/utils";
-import Logo from "@/components/shared/logo";
 
 const Navbar = ({ className }: { className?: string }) => {
 	const [currentUser] = useAuthState(auth);
@@ -26,7 +25,7 @@ const Navbar = ({ className }: { className?: string }) => {
 						className="flex items-center space-x-2 md:hidden"
 						type="button"
 					>
-						<LuFish />
+						<Logo />
 						<span className="font-bold">Menu</span>
 					</button>
 				</div>

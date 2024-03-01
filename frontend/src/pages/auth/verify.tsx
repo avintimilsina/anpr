@@ -22,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import PageLoadingSpinner from "@/components/shared/page-loading-spinner";
 import { auth } from "../../../firebase";
+import Logo from "@/components/shared/logo";
 
 interface VerifyEmailPageProps {
 	currentUser: User;
@@ -33,9 +34,7 @@ const VerifyEmailPage = ({ currentUser }: VerifyEmailPageProps) => {
 		<div className="flex h-screen flex-col items-center justify-center">
 			<Card className=" w-full max-w-md">
 				<CardHeader>
-					<h1 className="tems-center w-full scroll-m-20 text-4xl font-extrabold lg:text-5xl">
-						anpr
-					</h1>
+					<Logo className="my-4" />
 					<CardTitle>Verify your email</CardTitle>
 					<CardDescription>
 						You&apos;ll get an email with a verification link.
@@ -86,7 +85,7 @@ const VerifyEmail = () => {
 		return <PageLoadingSpinner />;
 	}
 	if (!user) {
-		router.push("/auth/register");
+		router.push("/auth/login");
 		return <PageLoadingSpinner />;
 	}
 	return (
@@ -95,7 +94,6 @@ const VerifyEmail = () => {
 		</div>
 	);
 };
-
 
 export default VerifyEmail;
 
@@ -107,4 +105,3 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 		},
 	};
 }
-

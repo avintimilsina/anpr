@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
@@ -6,6 +7,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import { LuCalendar, LuLoader2 } from "react-icons/lu";
+import { toast } from "sonner";
 import Dropzone from "../shared/dropzone";
 import { Button } from "../ui/button";
 import {
@@ -57,6 +59,10 @@ const VideoForm = () => {
 			}),
 		});
 		const datam = await response.json();
+		if (datam?.error) {
+			toast.error(datam.error);
+			return;
+		}
 
 		// @ts-expect-error Type error
 		Object.values(datam).forEach(async (video: VideoData) => {
