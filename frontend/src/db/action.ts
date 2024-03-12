@@ -8,7 +8,7 @@ import {
 	setDoc,
 	updateDoc,
 	getDoc,
-	type Timestamp,
+	Timestamp,
 	increment,
 	runTransaction,
 } from "firebase/firestore";
@@ -74,7 +74,8 @@ export const vehicleEntry = async ({
 						amount: increment(
 							(Number(
 								calculateParking(
-									querySnapshot.docs[0].data().entry as Timestamp
+									querySnapshot.docs[0].data().entry as Timestamp,
+									Timestamp.fromDate(time ?? new Date())
 								)
 							) ?? 0) * -100
 						),
