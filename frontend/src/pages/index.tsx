@@ -43,7 +43,7 @@ const Home = () => (
 				<div className="w- flex max-w-lg flex-col justify-center gap-6 p-8">
 					<h2 className="text-3xl font-semibold">Are You Parking Provider?</h2>
 					<p>
-						Whether you&apos;ve got a garage to fill or you&apos;ew trying to
+						Whether you&apos;ve got a garage to fill or you&apos;re trying to
 						make your city and events more manageable, ParkSathi makes
 						everything easier
 					</p>
