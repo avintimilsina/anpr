@@ -82,7 +82,11 @@ const SignUpForm = ({ onShowLogin, onSignUp }: SignUpFormProps) => {
 								<FormItem>
 									<FormLabel>Email Address</FormLabel>
 									<FormControl>
-										<Input type="email" {...field} />
+										<Input
+											type="email"
+											{...field}
+											placeholder="name@example.com"
+										/>
 									</FormControl>
 
 									<FormMessage />
@@ -96,7 +100,7 @@ const SignUpForm = ({ onShowLogin, onSignUp }: SignUpFormProps) => {
 								<FormItem>
 									<FormLabel>Password</FormLabel>
 									<FormControl>
-										<Input type="password" {...field} />
+										<Input type="password" {...field} placeholder="••••••••" />
 									</FormControl>
 
 									<FormMessage />

@@ -223,7 +223,12 @@ const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
 							<FormItem>
 								<FormLabel>Vehicle Number</FormLabel>
 								<FormControl>
-									<Input placeholder="0000-9999" {...field} maxLength={4} pattern="[0-9]{4}"/>
+									<Input
+										placeholder="0000-9999"
+										{...field}
+										maxLength={4}
+										pattern="[0-9]{4}"
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -322,7 +327,9 @@ const VehicleForm = ({ initialValues, onSuccess }: VehicleFormProps) => {
 						</FormItem>
 					)}
 				/>
-				<Button type="submit">Add New Vehicle</Button>
+				<Button type="submit" className="mt-4">
+					Add New Vehicle
+				</Button>
 			</form>
 		</Form>
 	);

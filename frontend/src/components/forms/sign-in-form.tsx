@@ -64,7 +64,12 @@ const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 							<FormItem>
 								<FormLabel>Email Address</FormLabel>
 								<FormControl>
-									<Input type="email" {...field} />
+									<Input
+										type="email"
+										{...field}
+										placeholder="name@example.com"
+										autoComplete="email"
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -77,7 +82,7 @@ const SignInForm = ({ onShowSignUp }: SignInFormProps) => {
 							<FormItem>
 								<FormLabel>Password</FormLabel>
 								<FormControl>
-									<Input type="password" {...field} />
+									<Input type="password" {...field} placeholder="••••••••" />
 								</FormControl>
 								<FormMessage />
 							</FormItem>

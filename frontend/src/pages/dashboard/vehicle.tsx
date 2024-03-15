@@ -58,7 +58,7 @@ const VehiclePage = () => {
 					}}
 				>
 					<div className="w-full">
-						<div className="bg-secondary/50 flex flex-col space-y-4 px-4 py-8 md:px-16">
+						<div className="bg-secondary/5 flex flex-col space-y-4 px-4 py-8 md:px-16">
 							<VehicleForm onSuccess={() => setNewVehicleModal(false)} />
 						</div>
 					</div>

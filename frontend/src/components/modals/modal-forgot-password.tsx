@@ -55,6 +55,7 @@ const ModalForgotPassword = ({
 					disabled={isLoading}
 					name="email"
 					type="email"
+					placeholder="name@example.com"
 					required
 				/>
 
