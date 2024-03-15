@@ -96,7 +96,7 @@ const DashboardHome = () => {
 				<div className="space-y-0.5">
 					<h2 className="text-2xl font-bold tracking-tight">Parking</h2>
 					<p className="text-muted-foreground">
-						Every vehicle that you parked.
+						Every vehicle that you have parked.
 					</p>
 				</div>
 				<div className="flex flex-row gap-2">

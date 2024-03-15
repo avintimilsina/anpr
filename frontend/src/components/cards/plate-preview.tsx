@@ -31,7 +31,7 @@ const LicensePlatePreview = ({
 					>
 						<h2>{vehicleType ?? "X"}</h2>
 						<h2>{vehicleAgeIdentifier.toLocaleUpperCase() || "XX"}</h2>
-						<h2>{vehicleNumber ?? "0000"}</h2>
+						<h2>{vehicleNumber || "0000"}</h2>
 					</div>
 				</div>
 			</div>
