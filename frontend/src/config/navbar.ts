@@ -60,11 +60,6 @@ export const DASHBOARD_NAV_ITEMS: NavItem[] = [
 		key: "dashboard",
 	},
 	{
-		title: "Parking",
-		href: "/dashboard/parking",
-		key: "parking",
-	},
-	{
 		title: "Vehicles",
 		href: "/dashboard/vehicle",
 		key: "vehicle",
