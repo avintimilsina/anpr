@@ -16,6 +16,7 @@ import VehicleForm from "@/components/forms/vehicle-form";
 import Modal from "@/components/shared/modal";
 import { type Vehicle } from "@/db/schema";
 import VehicleCard from "@/components/cards/vehicle-card";
+import withProtected from "@/routes/withProtected";
 
 const VehiclePage = () => {
 	const [currentUser] = useAuthState(auth);
@@ -73,4 +74,4 @@ const VehiclePage = () => {
 	);
 };
 
-export default VehiclePage;
+export default withProtected(VehiclePage);

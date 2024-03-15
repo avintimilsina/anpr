@@ -34,6 +34,7 @@ import {
 import { getParking } from "@/db/query";
 import { type Parking } from "@/db/schema";
 import { CELL_ACTIONS } from "@/db/action";
+import withAdminProtected from "@/routes/withAdminProtected";
 
 dayjs.extend(relativeTime);
 
@@ -209,4 +210,4 @@ const DashboardHome = () => {
 	);
 };
 
-export default DashboardHome;
+export default withAdminProtected(DashboardHome);

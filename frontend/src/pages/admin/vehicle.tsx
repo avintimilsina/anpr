@@ -28,6 +28,7 @@ import { getVehicle } from "@/db/query";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { db } from "../../../firebase";
+import withAdminProtected from "@/routes/withAdminProtected";
 
 const ACTION_BUTTONS = [
 	{
@@ -202,4 +203,4 @@ const Vehicle = () => {
 	);
 };
 
-export default Vehicle;
+export default withAdminProtected(Vehicle);

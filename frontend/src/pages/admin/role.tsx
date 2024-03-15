@@ -43,6 +43,7 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { extractFirstCharacter } from "@/components/helpers";
 import UserProfile from "@/components/shared/user-profile";
+import withAdminProtected from "@/routes/withAdminProtected";
 
 const RolePage = () => {
 	const [search, setSearch] = useState("");
@@ -215,4 +216,4 @@ const RolePage = () => {
 	);
 };
 
-export default RolePage;
+export default withAdminProtected(RolePage);

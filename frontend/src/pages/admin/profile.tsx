@@ -1,5 +1,6 @@
 import ProfileForm from "@/components/forms/profile-form";
 import { Separator } from "@/components/ui/separator";
+import withAdminProtected from "@/routes/withAdminProtected";
 
 const Profile = () => (
 	<div className="m-4 flex-1 space-y-6 lg:max-w-2xl">
@@ -14,4 +15,4 @@ const Profile = () => (
 	</div>
 );
 
-export default Profile;
+export default withAdminProtected(Profile);
