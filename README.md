@@ -51,12 +51,12 @@ To get a local copy up and running follow these simple example steps.
 
 1. Clone the repo
    ```sh copy
-      git clone https://github.com/avintimilsina/hulak.git
+   git clone https://github.com/avintimilsina/anpr.git
    ```
 2. Install the project dependencies
 
    ```sh copy
-       $ pnpm install
+   pnpm install
    ```
 
 3. Rename the `env.example` to `env.local` & update you enviroment variables in all the apps.
@@ -68,41 +68,41 @@ To get a local copy up and running follow these simple example steps.
 4. Run the following commands to start the development server
 
    ```sh copy
-      $ pnpm dev
+   pnpm dev
    ```
 
 ### To Initialize The Backend
 
 1. Navigate to the api folder.
    ```sh copy
-      cd ~/anpr/api
+   cd anpr/api
    ```
 2. Create a virtual environment for the kernel
 
    For Windows:
 
    ```powershell copy
-       $ pythom -m venv venv
-       $ venv\Scripts\Activate.ps1
+   pythom -m venv venv
+   venv\Scripts\Activate.ps1
    ```
 
-   For fish:
+   For Linux:
 
-   ```fish copy
-       $ pythom -m venv venv
-       $ source venv/bin/activate.fish
+   ```sh copy
+   pythom -m venv venv
+   source venv/bin/activate.fish
    ```
 
 3. Install the python dependencies.
 
    ```sh copy
-      $ pip install -r requirements.txt
+   pip install -r requirements.txt
    ```
 
 4. Run the following commands to start the backend server
 
    ```sh copy
-      $ python main.py
+   python main.py
    ```
 
 ## Apps
