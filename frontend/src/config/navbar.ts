@@ -27,7 +27,7 @@ export const ADMIN_DASHBOARD_NAV_ITEMS_TOP: NavItem[] = [
 	{
 		title: "Vehicle",
 		href: "/admin/vehicle",
-		icon: "dashboard",
+		icon: "parking",
 		key: "vehicle",
 	},
 	{
@@ -39,18 +39,18 @@ export const ADMIN_DASHBOARD_NAV_ITEMS_TOP: NavItem[] = [
 	{
 		title: "Roles",
 		href: "/admin/role",
-		icon: "employee",
+		icon: "settings",
 		key: "user",
 	},
 ];
 
 export const ADMIN_DASHBOARD_NAV_ITEMS_BOTTOM: NavItem[] = [
-	{
-		title: "Login",
-		href: "/auth/login",
-		icon: "login",
-		key: "login",
-	},
+	// {
+	// 	title: "Login",
+	// 	href: "/auth/login",
+	// 	icon: "login",
+	// 	key: "login",
+	// },
 ];
 
 export const DASHBOARD_NAV_ITEMS: NavItem[] = [

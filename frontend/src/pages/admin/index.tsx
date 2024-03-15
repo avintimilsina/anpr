@@ -52,6 +52,10 @@ const DashboardHome = () => {
 		<div className="flex flex-col gap-4 lg:max-w-6xl">
 			<div className="flex flex-col items-end gap-2 md:flex-row">
 				<div className="flex-grow p-4">
+					<h2 className="text-2xl font-bold tracking-tight ">Vehicle Entry</h2>
+					<p className="text-muted-foreground mb-4">
+						Enter vehicle details either manually or from a video.
+					</p>
 					<ParkingForm />
 				</div>
 				<div className="h-full flex-grow p-4">

@@ -39,7 +39,8 @@ const Step = ({ label, text, image }: StepProps) => {
 				<div
 					className={cn(
 						"grid aspect-square w-[25%] place-items-center border transition-all duration-500 ease-out",
-						isHovering && `w-full ${images[image]}  bg-cover>`
+						isHovering &&
+							`w-full ${images[image]} >  bg-cover bg-center bg-no-repeat`
 					)}
 				>
 					<div className={cn("p-4", isHovering && "border")}>

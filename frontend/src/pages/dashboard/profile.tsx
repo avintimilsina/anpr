@@ -1,11 +1,12 @@
 import ProfileForm from "@/components/forms/profile-form";
 import { Separator } from "@/components/ui/separator";
+import withProtected from "@/routes/withProtected";
 
 const Profile = () => (
 	<div className="m-4 flex-1 space-y-6 lg:max-w-2xl">
 		<div>
-			<h3 className="text-lg font-medium">Profile</h3>
-			<p className="text-muted-foreground text-sm">
+			<h2 className="text-2xl font-bold tracking-tight">Profile</h2>
+			<p className="text-muted-foreground">
 				This is how others will see you on the site.
 			</p>
 		</div>
@@ -14,4 +15,4 @@ const Profile = () => (
 	</div>
 );
 
-export default Profile;
+export default withProtected(Profile);

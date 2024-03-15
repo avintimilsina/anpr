@@ -73,9 +73,9 @@ const RolePage = () => {
 		<div className="m-4 flex-1 space-y-6 lg:max-w-5xl">
 			<div className="flex flex-row items-center justify-between">
 				<div className="space-y-0.5">
-					<h2 className="text-2xl font-bold tracking-tight">Parking</h2>
+					<h2 className="text-2xl font-bold tracking-tight">Roles</h2>
 					<p className="text-muted-foreground">
-						Every vehicle that&apos;s parked or was parked.
+						Manage admin privileges by adding and revoking roles.
 					</p>
 				</div>
 				<div className="flex flex-row gap-2">
@@ -87,7 +87,7 @@ const RolePage = () => {
 					/>
 					<Dialog>
 						<DialogTrigger asChild>
-							<Button variant="outline">New Admin</Button>
+							<Button variant="default">New Admin</Button>
 						</DialogTrigger>
 						<DialogContent className="sm:max-w-[425px]">
 							<DialogHeader>

@@ -29,7 +29,7 @@ const Home = () => (
 			</p>
 			<div className="mx-auto flex w-full max-w-xs flex-row justify-center lg:max-w-sm">
 				<Link
-					href="/auth/login"
+					href="/dashboard"
 					className={buttonVariants({ variant: "default", size: "lg" })}
 				>
 					Get Started

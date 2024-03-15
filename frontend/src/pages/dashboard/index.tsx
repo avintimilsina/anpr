@@ -18,7 +18,7 @@ import dayjs from "dayjs";
 import { useFormatter } from "next-intl";
 import { toast } from "sonner";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Vehicle, type Parking } from "@/db/schema";
+import { type Vehicle, type Parking } from "@/db/schema";
 import {
 	Select,
 	SelectContent,
@@ -43,6 +43,7 @@ import { Input } from "@/components/ui/input";
 import { auth, db } from "../../../firebase";
 import { Badge } from "@/components/ui/badge";
 import BillModal from "@/components/modals/bill-modal";
+import withProtected from "@/routes/withProtected";
 
 const CELL_ACTIONS = [
 	{
@@ -240,4 +241,4 @@ const DashboardHome = () => {
 	);
 };
 
-export default DashboardHome;
+export default withProtected(DashboardHome);

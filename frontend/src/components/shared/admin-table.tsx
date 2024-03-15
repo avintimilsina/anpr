@@ -63,7 +63,7 @@ const AdminTable = ({ admins, search }: TableContentProps) => {
 
 	return (
 		<div>
-			<Table className="border-1 my-8">
+			<Table className="border-1 my-2">
 				<TableHeader>
 					<TableRow>
 						<TableHead className="whitespace-nowrap">Member</TableHead>
