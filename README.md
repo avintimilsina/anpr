@@ -21,12 +21,20 @@
 
 ## About The Project
 
+| File     | Link                              |
+| -------- | ---------------------------------------- |
+| Report      | [FinalProjectReport.pdf](./documents/FinalProjectReport.pdf)   |
+| Report (Editable Document)      | [FinalProjectReport.docx](./documents/FinalProjectReport.docx)   |
+| Presentation      | [FinalProjectReport.pptx](./documents/FinalProjectReport.pptx)   |
+
 ParkSathi is a project aimed at revolutionizing the parking experience. With a focus on simplicity and efficiency, ParkSathi offers a smart parking solution that benefits both parking providers and users alike. Leveraging advanced tools such as YOLOv8 for object detection and EasyOCR for character recognition, ParkSathi ensures seamless parking spot identification and vehicle information processing.
 
 By utilizing YOLOv8, ParkSathi accurately detects and locates cars, providing admin with up-to-date vehicle information. Additionally, EasyOCR facilitates the swift recognition of vehicle license plates,streamlining the registration process and enabling effortless time-based billing.
 Through the integration of these technologies, ParkSathi delivers a user-friendly and efficient parking solution that revolutionizes urban mobility.
 
 ParkSathi is transforming the way we think about parking, making urban life more manageable and stress-free for everyone involved.
+
+<video src="./documents/reports/ParkingSolution.mp4"></video>
 
 ## Built With
 
